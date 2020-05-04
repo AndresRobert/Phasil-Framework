@@ -1,4 +1,4 @@
-#Phasil: PHP API Simple Layout
+# Phasil: PHP API Simple Layout
 This is more than just a basic project, it's a layout for rapid backend API PHP development.
 
 Don't get lost on hard to code REST definitions, you just need to define an endpoint and 
@@ -11,7 +11,7 @@ The project has no deep roots so no limits on what you are able to modify.
 
 Phasil stands for PHp Api SImple Layout, but also is pronounced like the Spanish word "fácil" that means easy.  
 
-##Requirements
+## Requirements
 * Apache server
 * MySQL (by default, can be changed)
 * PHP 7+
@@ -24,7 +24,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.+)$ index.php [QSA,L]
 ````
 
-###How to use
+## How to use
 On index.php set a new route (method, endpoint, response):
 ````php
 Route::Create('GET', '/myEndpoint', 'home/about');
@@ -189,7 +189,7 @@ That's it you successfully completed your first PHP ERA API!
 
 You wanna know more? Sure!
 
-###FAQ
+## FAQ
 * How does the response get rendered?
     * This line in the index.php gets the job done by getting the METHOD used, the REQUESTed endpoint and the BODY payload:
     ````php
@@ -202,10 +202,10 @@ You wanna know more? Sure!
 * Do we have a toolbox, or something?
     * Sure we do! they are called Helpers (/core/Helper.php) and there are some already (and more will be added): Session, Cookie, File, Api, Text & Password, check them all out!.
 
-##Developed by 
+## Developed by 
 ACODE Design & Development 2020 [Andres Robert]
 
 Visit https://phasil.acode.cl
 
-##Version
+## Version
 0.1.0
