@@ -32,7 +32,7 @@ Route::Create('GET', '/myEndpoint', 'home/about');
 This will define a new endpoint accessible by GET like https://www.yourwebsite.dev/myEndpoint,
 and the response for it will come from the "about" method in the "home" class.
 
-Create the /api/responses/HomeResponse.php file to define the "home" class and "about" method:
+Create the /api/responses/HomeResponse.php file to define the "home" class and the "about" method:
 ````php
 <?php
 class Home extends Response {
@@ -105,7 +105,7 @@ INSERT INTO `users` (`id`, `user_name`, `password`, `token`, `token_start`, `tok
 (1, 'andres', '$2y$10$.omT9VH0fHR/50uQbTLqf.W1B/r4JrNTmXnMDC.mOyJyLNIh6s9Bm', NULL, NULL, NULL, 'andres@acode.cl', NULL, NULL, '2020-01-02 01:23:45', NULL, NULL),
 (2, 'robert', '$2y$10$DdiLEJugC7TdjAznY4AgBO0waJgUVm1Jwj4j99l393ntynI.1BVYC', NULL, NULL, NULL, 'robert@acode.cl', NULL, NULL, '2020-03-04 01:23:45', NULL, NULL);
 ````
-Create the corresponding model on /api/models as UserModel.php and extend the basic Model (the important part is define the table name):
+Create the corresponding model file /api/models/UserModel.php and extend the basic Model (the important part is define the table name):
 ````php
 <?php
 class User extends Model {
