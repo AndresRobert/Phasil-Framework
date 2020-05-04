@@ -30,7 +30,7 @@ On index.php set a new route (method, endpoint, response):
 Route::Create('GET', '/myEndpoint', 'home/about');
 ````
 This will define a new endpoint accessible by GET like https://www.yourwebsite.dev/myEndpoint,
-and the response for it will come from the "about" in the "home" class.
+and the response for it will come from the "about" method in the "home" class.
 
 Create the /api/responses/HomeResponse.php file to define the "home" class and "about" method:
 ````php
@@ -185,7 +185,7 @@ And get:
 }
 ````
 
-That's it you successfully completed your first PHP ERA API!
+That's it! you successfully completed your first PHP ERA API!
 
 You wanna know more? Sure!
 
