@@ -1,6 +1,7 @@
 <?php
 
-require_once DATABASE;
+namespace Base;
+
 use Core\Database\MySQL;
 
 /**
@@ -37,7 +38,7 @@ class Model {
     }
 
     /**
-     * Sets one or more attributes in the current instance
+     * Sets one or more attributes in the current instance ['key' => 'value']
      *
      * @param array $row
      */

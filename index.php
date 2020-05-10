@@ -2,7 +2,7 @@
 
 include 'core/Config.php';
 
-use Core\Routes\Route;
+use Core\Route;
 
 // ENDPOINTS SETUP
 Route::Create('GET', '/', 'dom/info');

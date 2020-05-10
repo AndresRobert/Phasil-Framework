@@ -1,5 +1,9 @@
 <?php
 
+namespace Base;
+
+use Core\File;
+
 /**
  * The force is strong with this Response class and you need to extend your response classes from this one.
  *
@@ -20,5 +24,38 @@ class Response {
      * @return bool
      */
     public function authorized (): bool { return TRUE; }
+
+    /**
+     * @param string $response
+     * @param array  $payload
+     *
+     * @return array|null
+     */
+    final public static function Get (string $response, array $payload) {
+        [$class, $method] = explode('/', $response) ?? ['', ''];
+        $class = ucfirst($class);
+        $file = $class.'Response.php';
+        if (File::IsFile(RESPONSES.$file)) {
+            require_once RESPONSES.$file;
+            return (new $class())->$method($payload) ?? [];
+        }
+        return NULL;
+    }
+
+    /**
+     * @param string $response
+     *
+     * @return bool
+     */
+    final public static function Exists (string $response): bool {
+        [$class, $method] = explode('/', $response) ?? ['', ''];
+        $class = ucfirst($class);
+        $file = $class.'Response.php';
+        if (File::IsFile(RESPONSES.$file)) {
+            require_once RESPONSES.$file;
+            return method_exists($class, $method);
+        }
+        return FALSE;
+    }
 
 }

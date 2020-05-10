@@ -1,8 +1,9 @@
 <?php
 
-namespace Core\Routes;
+namespace Core;
 
-use Core\Helpers;
+use Core\Session;
+use Base\Response;
 
 abstract class Route {
 
@@ -84,7 +85,7 @@ abstract class Route {
      * @return int
      */
     final private static function get_response_code (string $request_method, string $endpoint): int {
-        $routes = Helpers\Session::Read('Routes');
+        $routes = Session::Read('Routes');
         if (!self::is_method_allowed($request_method)) {
             return 405;
         }
@@ -94,7 +95,7 @@ abstract class Route {
         if (!isset($routes[$request_method][$endpoint])) {
             return 404;
         }
-        if (!Helpers\Api::Exists($routes[$request_method][$endpoint])) {
+        if (!Response::Exists($routes[$request_method][$endpoint])) {
             return 400;
         }
         return 200;
@@ -110,9 +111,9 @@ abstract class Route {
     final public static function Create (string $request_method, string $endpoint, string $response): void {
         if (self::is_method_allowed($request_method)) {
             $endpoint = $endpoint === '' ? '/' : $endpoint;
-            $routes = Helpers\Session::Read('Routes');
+            $routes = Session::Read('Routes');
             $routes[$request_method][$endpoint] = $response;
-            Helpers\Session::Create('Routes', $routes);
+            Session::Create('Routes', $routes);
         }
     }
 
@@ -126,9 +127,9 @@ abstract class Route {
      * @return string
      */
     final public static function Read (string $request_method, string $endpoint, array $payload = []): string {
-        $routes = Helpers\Session::Read('Routes');
+        $routes = Session::Read('Routes');
         $responseCode = self::get_response_code($request_method, $endpoint);
-        $response = $responseCode === 200 ? Helpers\Api::Response($routes[$request_method][$endpoint], $payload) : [];
+        $response = $responseCode === 200 ? Response::Get($routes[$request_method][$endpoint], $payload) : [];
         $responseCode = isset($response['response_code']) ? $response['response_code'] : $responseCode;
         http_response_code($responseCode);
         return json_encode(['status' => self::$responseCodes[$responseCode], 'response' => $response] + ABOUT);

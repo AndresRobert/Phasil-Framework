@@ -68,7 +68,7 @@ And get:
 }
 ````
 
-Thats it!
+That's it!
 
 "Wait a second!, you said something about database sh... stuff"
 
@@ -77,33 +77,25 @@ You can set your credentials on the "config" file inside the "core" folder
 ````php
 // DATABASE
 define('HOST', 'localhost');
-define('DBNAME', 'phasil');
-define('USERNAME', 'root');
-define('PASSWORD', 'root');
-define('TABLE_PREFIX', '');
+define('DBNAME',  'phasil');
+define('USERNAME',  'root');
+define('PASSWORD',  'root');
+define('TABLE_PREFIX',  '');
 ````
-Create some table:
+Create a table:
 ````mysql
 CREATE TABLE `users` (
   `id` int(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `user_name` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `token` varchar(255) DEFAULT NULL,
-  `token_start` timestamp NULL DEFAULT NULL,
-  `token_expire` timestamp NULL DEFAULT NULL,
-  `email` varchar(255) NOT NULL,
-  `full_name` varchar(255) DEFAULT NULL,
-  `device` varchar(255) DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `modified` timestamp NULL DEFAULT NULL,
-  `deleted` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `email` varchar(255) NOT NULL
+);
 ````
 Add some rows:
 ````mysql
-INSERT INTO `users` (`id`, `user_name`, `password`, `token`, `token_start`, `token_expire`, `email`, `full_name`, `device`, `created`, `modified`, `deleted`) VALUES
-(1, 'andres', '$2y$10$.omT9VH0fHR/50uQbTLqf.W1B/r4JrNTmXnMDC.mOyJyLNIh6s9Bm', NULL, NULL, NULL, 'andres@acode.cl', NULL, NULL, '2020-01-02 01:23:45', NULL, NULL),
-(2, 'robert', '$2y$10$DdiLEJugC7TdjAznY4AgBO0waJgUVm1Jwj4j99l393ntynI.1BVYC', NULL, NULL, NULL, 'robert@acode.cl', NULL, NULL, '2020-03-04 01:23:45', NULL, NULL);
+INSERT INTO `users` (`id`, `user_name`, `password`, `email`) VALUES
+(1, 'andres', '$2y$10$.omT9VH0fHR/50uQbTLqf.W1B/r4JrNTmXnMDC.mOyJyLNIh6s9Bm', 'andres@acode.cl'),
+(2, 'robert', '$2y$10$DdiLEJugC7TdjAznY4AgBO0waJgUVm1Jwj4j99l393ntynI.1BVYC', 'robert@acode.cl');
 ````
 Create the corresponding model file /api/models/UserModel.php and extend the basic Model (the important part is define the table name):
 ````php
@@ -131,14 +123,7 @@ require_once MODELS.'UserModel.php';
 
 class Home extends Response {
     
-    public function about (): array {
-        return [
-            'name' => 'Phasil',
-            'description' => 'Easy PHP ERA (Endpoint Response API) Facilitator',
-            'link' => 'https://phasil.acode.cl',
-            'github' => 'https://github.com/AndresRobert/Phasil-Framework'
-        ];
-    }
+    public function about (): array {...}
 
     /**
      * Get all users
@@ -171,15 +156,7 @@ And get:
             "id": "1",
             "user_name": "andres",
             "password": "$2y$10$.omT9VH0fHR/50uQbTLqf.W1B/r4JrNTmXnMDC.mOyJyLNIh6s9Bm",
-            "token": null,
-            "token_start": null,
-            "token_expire": null,
-            "email": "andres@acode.cl",
-            "full_name": null,
-            "device": null,
-            "created": "2020-05-01 00:12:29",
-            "modified": null,
-            "deleted": null
+            "email": "andres@acode.cl"
         }
     ]
 }

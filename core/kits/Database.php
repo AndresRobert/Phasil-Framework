@@ -1,8 +1,7 @@
 <?php
 
-namespace Core\Database;
+namespace Core;
 
-use Core\Helpers\Text;
 use PDO;
 use PDOException;
 

@@ -2,6 +2,8 @@
 
 require_once MODELS.'UserModel.php';
 
+use Base\Response;
+
 class Dom extends Response {
 
     public function info (): array {
