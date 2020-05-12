@@ -6,7 +6,7 @@ write a response for it. Easy as that!.
 
 New ERA model for API development (ERA: Endpoint-Response API).
 
-You need to connect a database? Sure, MySQL configuration out of the box.
+You need to connect a database? Sure, MySQL configuration and JWT security is out of the box.
 The project has no deep roots so no limits on what you are able to modify.
 
 Phasil stands for PHp Api SImple Layout, but also is pronounced like the Spanish word "fácil" 
