@@ -71,6 +71,7 @@ That's it!
 True! you can actually add some more love to your project, you can set your credentials 
 on "/api/config/Core.php" file:
 ````php
+<?php
 // DATABASE
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'phasil');
@@ -100,7 +101,7 @@ ALTER TABLE users
 ````
 Add some rows:
 ````mysql
-INSERT INTO `users` (`id`, `user_name`, `password`, `email`) VALUES
+INSERT INTO users (id, user_name, password, email) VALUES
 (1, 'andres', '$2y$10$...', 'andres@acode.cl'),
 (2, 'robert', '$5t$87$...', 'robert@acode.cl');
 ````
@@ -120,6 +121,7 @@ you're welcome #Hela'sVoice.
 
 We can define a second endpoint in the "/api/index.php" file:
 ````php
+<?php
 Route::Create('POST', '/listUsers', 'users/list');
 ````
 Add the class and method (api/models/UsersModel.php):
@@ -175,6 +177,7 @@ JWT Library (firebase/php-jwt) is there pre-implemented on the Auth kit.
 First, you need to change the JWT_SECRET on "/api/config/Core.php" or else 
 everyone who uses this layout will "know your secret":
 ````php
+<?php
 // JWT
 // You must change this JWT_SECRET for your project
 define('JWT_SECRET', 'wLdkrBuQ36auUFzEd2mv9KyznwtLgaBXgoUUAMJvSXGN4uvy3OjnBUDbgT-gh27fl3AmDS2SdnVZ5KnHcWrWFrd8C13RXIbso4tDg1BVOEVgTZnUxIdiDm0csn--HRqEG-xbB8RZokBZeHTq53Uh0TkuUSPeb_tkfuhmYttIHZU');
@@ -187,6 +190,7 @@ Obviouly you can change everything.
 
 Second, make your response authorization safe (on api/models/UsersModel.php):
 ````php
+<?php
 function list (array $filters = []): array {
     $validate = Auth::JWTValidate();
     if ($validate['status'] === 'success') {
@@ -302,6 +306,7 @@ That's it! Notice that the token came back by one line of code: `Auth::JWToken($
 * How does the response get rendered?
     * This line in the index.php gets the job done by getting the METHOD used, the REQUESTed endpoint and the BODY payload:
     ````php
+    <?php
     echo Route::Read(METHOD, REQUEST, BODY);
     ````
 * Which DB options do I have?
