@@ -18,8 +18,9 @@ that means easy.
 * PHP 7+
 
 ## How to use
-On /api/index.php set a new route (method, endpoint, response):
+On "/api/index.php" set a new route (method, endpoint, response):
 ````php
+<?php
 Route::Create('GET', '/myEndpoint', 'home/about');
 ````
 This will define a new endpoint accessible by GET like 
