@@ -14,8 +14,8 @@ class User extends Model {
      * User constructor.
      */
     public function __construct () {
-        parent::__construct();
         $this->table = 'users';
+        parent::__construct();
     }
 
 }

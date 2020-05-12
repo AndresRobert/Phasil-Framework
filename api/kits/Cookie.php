@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace Kits;
 
 abstract class Cookie {
 

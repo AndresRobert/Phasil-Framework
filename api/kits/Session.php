@@ -1,8 +1,8 @@
 <?php
 
-namespace Core;
+namespace Kits;
 
-session_save_path("core/tmp");
+session_save_path(TMP);
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }

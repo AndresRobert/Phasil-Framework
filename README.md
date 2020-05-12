@@ -1,45 +1,40 @@
 # Phasil: PHP API Simple Layout
-This is more than just a basic project, it's a layout for rapid backend API PHP development.
+This is simpler than a microframework, it's just a layout for rapid backend API development.
 
 Don't get lost on hard to code REST definitions, you just need to define an endpoint and 
 write a response for it. Easy as that!.
 
-New ERA model for API development (ERA: Endpoint Response API).
+New ERA model for API development (ERA: Endpoint-Response API).
 
 You need to connect a database? Sure, MySQL configuration out of the box.
 The project has no deep roots so no limits on what you are able to modify.
 
-Phasil stands for PHp Api SImple Layout, but also is pronounced like the Spanish word "fácil" that means easy.  
+Phasil stands for PHp Api SImple Layout, but also is pronounced like the Spanish word "fácil" 
+that means easy.  
 
-## Requirements
+## Minimum Requirements
 * Apache server
 * MySQL (by default, can be changed)
 * PHP 7+
-* htaccess configuration (included):
-````apacheconf
-RewriteEngine On
-RewriteBase /
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.+)$ index.php [QSA,L]
-````
 
 ## How to use
-On index.php set a new route (method, endpoint, response):
+On /api/index.php set a new route (method, endpoint, response):
 ````php
 Route::Create('GET', '/myEndpoint', 'home/about');
 ````
-This will define a new endpoint accessible by GET like https://www.yourwebsite.dev/myEndpoint,
-and the response for it will come from the "about" method in the "home" class.
+This will define a new endpoint accessible by GET like 
+https://www.yourwebsite.dev/api/myEndpoint, and the response for it will come from the 
+"about" method in the "home" class.
 
-Create the /api/responses/HomeResponse.php file to define the "home" class and the "about" method:
+Create the /api/responses/HomeResponse.php file to define the "home" class and the "about" 
+method:
 ````php
 <?php
 class Home extends Response {
     public function about (): array {
         return [
             'name' => 'Phasil',
-            'description' => 'Easy PHP ERA (Endpoint Response API) Facilitator',
+            'description' => 'ERA Layout (Endpoint-Response API) Facilitator',
             'link' => 'https://phasil.acode.cl',
             'github' => 'https://github.com/AndresRobert/Phasil-Framework'
         ];
@@ -49,7 +44,7 @@ class Home extends Response {
 
 Call it by Postman, browser or just:
 ````bash
-curl --location --request GET 'https://www.yourwebsite.dev/myEndpoint' \
+curl --location --request GET 'https://www.yourwebsite.dev/api/myEndpoint' \
 --header 'Content-Type: application/json'
 ````
 
@@ -60,7 +55,7 @@ And get:
     "response": [
         {
             "name": "Phasil",
-            "description": "Easy PHP ERA (Endpoint Response API) Facilitator",
+            "description": "ERA Layout (Endpoint-Response API) Facilitator",
             "link": "https://phasil.acode.cl",
             "github": "https://github.com/AndresRobert/Phasil-Framework"        
         }
@@ -70,17 +65,17 @@ And get:
 
 That's it!
 
-"Wait a second!, you said something about database sh... stuff"
+>"Wait a second!, you said something about some database sh... stuff!!"
 
-True! well you can actually add some more love to your project. 
-You can set your credentials on the "config" file inside the "core" folder
+True! you can actually add some more love to your project, you can set your credentials 
+on "/api/config/Core.php" file:
 ````php
 // DATABASE
-define('HOST', 'localhost');
-define('DBNAME',  'phasil');
-define('USERNAME',  'root');
-define('PASSWORD',  'root');
-define('TABLE_PREFIX',  '');
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'phasil');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', 'root');
+define('DB_TABLE_PREFIX', '');
 ````
 Create a table:
 ````mysql
@@ -97,21 +92,23 @@ INSERT INTO `users` (`id`, `user_name`, `password`, `email`) VALUES
 (1, 'andres', '$2y$10$.omT9VH0fHR/50uQbTLqf.W1B/r4JrNTmXnMDC.mOyJyLNIh6s9Bm', 'andres@acode.cl'),
 (2, 'robert', '$2y$10$DdiLEJugC7TdjAznY4AgBO0waJgUVm1Jwj4j99l393ntynI.1BVYC', 'robert@acode.cl');
 ````
-Create the corresponding model file /api/models/UserModel.php and extend the basic Model (the important part is define the table name):
+Create the corresponding model file "/api/models/UserModel.php" and extend the basic Model 
+(the important part is to define the table_name):
 ````php
 <?php
 class User extends Model {
     public function __construct () {
-        parent::__construct();
         $this->table = 'users';
+        parent::__construct();
     }
 }
 ````
-As you can guess, you can obviously redefine everything, add more methods etc... you're welcome.
+As you can guess, you can obviously redefine everything, add more methods, etc... 
+you're welcome.
 
-We can define a second endpoint in the index.php file:
+We can define a second endpoint in the "/api/index.php" file:
 ````php
-Route::Create('POST', '/users/list', 'home/users');
+Route::Create('POST', '/users/listThemAll', 'home/user_list');
 ````
 To keep it simple, I'll reuse home response handler instead of making a new one, ok?
 
@@ -119,20 +116,20 @@ Add the class and the method:
 ````php
 <?php
 
-require_once MODELS.'UserModel.php';
+require_once MDL.'UserModel.php';
 
 class Home extends Response {
     
     public function about (): array {...}
 
     /**
-     * Get all users
+     * List all users
      *
      * @param array $filters: passed by payload ;)
      * @return array
      */
-    function users (array $filters = []): array {
-        return (new User())->filter($filters);
+    function user_list (array $filters = []): array {
+        return (new User())->filter(['user_name', 'email'], $filters);
     }
 
 }
@@ -153,16 +150,14 @@ And get:
     "status": "OK",
     "response": [
         {
-            "id": "1",
             "user_name": "andres",
-            "password": "$2y$10$.omT9VH0fHR/50uQbTLqf.W1B/r4JrNTmXnMDC.mOyJyLNIh6s9Bm",
             "email": "andres@acode.cl"
         }
     ]
 }
 ````
 
-That's it! you successfully completed your first PHP ERA API!
+That's it! you successfully completed your first ERA!
 
 You wanna know more? Sure!
 
@@ -175,12 +170,12 @@ You wanna know more? Sure!
 * Which DB options do I have?
     * Insert, Select, Update, Delete & ComplexSelect (custom queries) are out of the box, but you are also encouraged to add more at /core/Database.php
 * Is there a Dashboard to control global variables and configuration?
-    * Of course! check /core/Config.php out!
+    * Of course! check /api/config/Core.php out!
 * Do we have a toolbox, or something?
-    * Sure we do! they are called Helpers (/core/Helper.php) and there are some already (and more will be added): Session, Cookie, File, Api, Text & Password, check them all out!.
+    * Sure we do! they are called Kits (/api/kits/) and there are some already (and more will be added): Session, Cookie, File, Text, etc., check them all out!.
 
 ## Developed by 
-ACODE Design & Development 2020 [Andres Robert]
+ACODE Design & Development 2020 @AndresRobert
 
 Visit https://phasil.acode.cl
 

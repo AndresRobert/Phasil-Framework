@@ -1,11 +1,9 @@
 {
-    "require-dev": {
-        "phpunit/phpunit": "^9"
-    },
     "require": {
-        "ext-pdo": "*",
-        "ext-apache": "*",
-        "ext-json": "*",
-        "ext-curl": "*"
+        "firebase/php-jwt": "^5.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9",
+        "codeception/codeception": "^4"
     }
 }

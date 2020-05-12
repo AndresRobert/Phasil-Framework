@@ -1,8 +1,8 @@
 <?php
 
-namespace Core;
+namespace Kits;
 
-abstract class Password {
+abstract class Auth {
 
     final public static function Hash (string $passcode): string {
         return password_hash($passcode, PASSWORD_BCRYPT);

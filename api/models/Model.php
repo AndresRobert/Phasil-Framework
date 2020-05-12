@@ -2,7 +2,7 @@
 
 namespace Base;
 
-use Core\Database\MySQL;
+use Kits\Database\MySQL;
 
 /**
  * The force is strong with this Model class and you need to extend your classes from this one.
@@ -13,7 +13,7 @@ use Core\Database\MySQL;
 class Model {
 
     /**
-     * Table name, you must define this in each constructor
+     * Table name, you must redefine this in each constructor
      *
      * @var string
      */
@@ -27,6 +27,13 @@ class Model {
     public array $columns;
 
     /**
+     * Contains all the column names of a particular model
+     *
+     * @var array
+     */
+    public array $fields;
+
+    /**
      * Gets an attribute by name of the current instance
      *
      * @param string $columnName
@@ -34,7 +41,10 @@ class Model {
      * @return mixed|null
      */
     public function get (string $columnName) {
-        return isset($this->columns[$columnName]) ? $this->columns[$columnName] : NULL;
+        if (in_array($columnName, $this->fields)) {
+            return $this->columns[$columnName] ?? NULL;
+        }
+        return NULL;
     }
 
     /**
@@ -44,15 +54,20 @@ class Model {
      */
     public function set (array $row): void {
         foreach ($row as $key => $value) {
-            $this->columns[$key] = $value;
+            if (in_array($key, $this->fields)) {
+                $this->columns[$key] = $value;
+            }
         }
     }
 
     /**
-     * You must define always the Table name for each extended class
+     * You must define always the Table name before for each extended class
+     *
      * Model constructor.
      */
-    public function __construct () { }
+    public function __construct () {
+        $this->fields = MySQL::Fields($this->table);
+    }
 
     /**
      * Model destructor
@@ -147,15 +162,18 @@ class Model {
      * @return array
      */
     public function filter (array $columns = ['*'], array $filters = [], string $order = '', string $limit = ''): array {
-        $result = MySQL::Select(
-            $this->table,
-            $columns,
-            $filters,
-            $order,
-            $limit
-        );
-        if ($result['status'] === 'success') {
-            return $result['response'];
+        $columnsAreValid  = !array_diff($columns, $this->fields) || $columns == ['*'];
+        if ($columnsAreValid) {
+            $result = MySQL::Select(
+                $this->table,
+                $columns,
+                $filters,
+                $order,
+                $limit
+            );
+            if ($result['status'] === 'success') {
+                return $result['response'];
+            }
         }
         return [];
     }

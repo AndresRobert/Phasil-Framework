@@ -1,6 +1,6 @@
 <?php
 
-require_once MODELS.'UserModel.php';
+require_once MDL.'UserModel.php';
 
 use Base\Response;
 
@@ -31,8 +31,8 @@ class Dom extends Response {
         ];
     }
 
-    function user_test () {
-        return (new User())->filter();
+    function user_test ($filter) {
+        return (new User())->filter(['*'], $filter);
     }
 
 }

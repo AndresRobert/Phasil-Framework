@@ -1,9 +1,10 @@
 <?php
 
-namespace Core;
+namespace Api;
 
-use Core\Session;
 use Base\Response;
+use Kits\Session;
+use Kits\Text;
 
 abstract class Route {
 
@@ -102,6 +103,14 @@ abstract class Route {
     }
 
     /**
+     * Clear routes
+     *
+     */
+    final public static function Clear (): void {
+        Session::Delete('Routes');
+    }
+
+    /**
      * Adds routing to your services
      *
      * @param string $request_method
@@ -110,7 +119,8 @@ abstract class Route {
      */
     final public static function Create (string $request_method, string $endpoint, string $response): void {
         if (self::is_method_allowed($request_method)) {
-            $endpoint = $endpoint === '' ? '/' : $endpoint;
+            $endpoint = Text::StartsWith(HTACCESS_FOLDER, $endpoint) ? $endpoint : HTACCESS_FOLDER.$endpoint;
+            $endpoint = in_array($endpoint, ['', '/']) ? '/' : $endpoint;
             $routes = Session::Read('Routes');
             $routes[$request_method][$endpoint] = $response;
             Session::Create('Routes', $routes);
