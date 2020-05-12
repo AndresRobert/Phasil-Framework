@@ -28,4 +28,21 @@ abstract class Text {
         return preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i", $url);
     }
 
+    /**
+     * Must be a minimum of 8 characters
+     * Must contain at least 1 number
+     * Must contain at least one uppercase character
+     * Must contain at least one lowercase character
+     *
+     * @param string $password
+     *
+     * @return bool
+     */
+    final public static function IsPassword (string $password): bool {
+        $uppercase = preg_match('@[A-Z]@', $password);
+        $lowercase = preg_match('@[a-z]@', $password);
+        $number = preg_match('@[0-9]@', $password);
+        return $uppercase || $lowercase || $number || strlen($password) > 7;
+    }
+
 }

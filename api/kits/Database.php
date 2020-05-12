@@ -30,7 +30,7 @@ abstract class MySQL {
     }
 
     private static function prepare_row (array $rows): string {
-        return "(".implode("','", $rows).")";
+        return "('".implode("','", $rows)."')";
     }
 
     private static function prepare_filter (array $filters): string {

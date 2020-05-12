@@ -1,7 +1,5 @@
 <?php
 
-require_once MDL.'UserModel.php';
-
 use Base\Response;
 
 class Dom extends Response {
@@ -29,10 +27,6 @@ class Dom extends Response {
                 ]
             ]
         ];
-    }
-
-    function user_test ($filter) {
-        return (new User())->filter(['*'], $filter);
     }
 
 }

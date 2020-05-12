@@ -25,6 +25,7 @@ define('API', ROOT.'api'.DS);
     define('SRC', API.'src'.DS);
     define('TMP', API.'tmp'.DS);
 define('VENDOR', ROOT.'vendor'.DS);
+    define('AUTOLOAD', VENDOR.'autoload.php');
 
 // GLOBALS
 define('ALLOWED_IMG_EXTENSIONS', ['jpeg', 'jpg', 'png']);
@@ -47,7 +48,15 @@ define('DB_USERNAME', 'root');
 define('DB_PASSWORD', 'root');
 define('DB_TABLE_PREFIX', '');
 
-// USE
+// JWT
+// You must change this JWT_SECRET for your project
+define('JWT_SECRET', 'wLdkrBuQ36auUFzEd2mv9KyznwtLgaBXgoUUAMJvSXGN4uvy3OjnBUDbgT-gh27fl3AmDS2SdnVZ5KnHcWrWFrd8C13RXIbso4tDg1BVOEVgTZnUxIdiDm0csn--HRqEG-xbB8RZokBZeHTq53Uh0TkuUSPeb_tkfuhmYttIHZU');
+define('JWT_ISSUER', 'PHASIL');
+define('JWT_AUDIENCE', 'THE_AUDIENCE');
+define('JWT_NOT_BEFORE', 5); // in seconds
+define('JWT_EXPIRE', 600); // in seconds
+
+// USES
 require_once ROUTER;
 require_once MODEL;
 require_once RESPONSE;
@@ -58,6 +67,7 @@ require_once DBASE;
 require_once FILE;
 require_once SESSION;
 require_once TEXT;
+require_once AUTOLOAD;
 
 // HEADERS
 header("Access-Control-Allow-Origin: *");

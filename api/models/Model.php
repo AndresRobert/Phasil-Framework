@@ -17,21 +17,21 @@ class Model {
      *
      * @var string
      */
-    public string $table;
+    protected string $table = '';
 
     /**
      * Contains all the attributes of a particular model
      *
      * @var array
      */
-    public array $columns;
+    protected array $columns = [];
 
     /**
      * Contains all the column names of a particular model
      *
      * @var array
      */
-    public array $fields;
+    protected array $fields = [];
 
     /**
      * Gets an attribute by name of the current instance
@@ -42,7 +42,7 @@ class Model {
      */
     public function get (string $columnName) {
         if (in_array($columnName, $this->fields)) {
-            return $this->columns[$columnName] ?? NULL;
+            return $this->columns[0][$columnName] ?? NULL;
         }
         return NULL;
     }
@@ -116,6 +116,26 @@ class Model {
     }
 
     /**
+     * Fill all attributes in the current instance by filter
+     *
+     * @param array $filter
+     *
+     * @return bool
+     */
+    public function readBy (array $filter): bool {
+        $result = MySQL::Select(
+            $this->table,
+            ['*'],
+            $filter
+        );
+        if ($result['status'] === 'success') {
+            $this->set($result['response']);
+            return TRUE;
+        }
+        return FALSE;
+    }
+
+    /**
      * Updates the record by ID using current instance attributes
      *
      * @return bool
@@ -176,6 +196,21 @@ class Model {
             }
         }
         return [];
+    }
+
+    public function exists(string $column, string $value) {
+        $columnsAreValid = !array_diff([$column], $this->fields);
+        $rows = [];
+        if ($columnsAreValid) {
+            $rows = MySQL::Select(
+                $this->table,
+                ['id'],
+                [$column => $value],
+                'id',
+                '1'
+            );
+        }
+        return count($rows) > 0;
     }
 
 }
