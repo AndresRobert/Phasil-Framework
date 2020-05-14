@@ -324,6 +324,10 @@ That's it! Notice that the token came back by one line of code: `Auth::JWToken($
 
 ## Troubleshooting
 Check the status of your configuration calling "/api/status"
+`````bash
+curl --location --request VIEW 'http://localhost/api/status' \
+--header 'Content-Type: application/json'
+`````
 
 ## Developed by 
 ACODE Design & Development 2020 @AndresRobert
