@@ -3,6 +3,7 @@
 namespace Kits;
 
 use DomainException;
+use Exception;
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\ExpiredException;
 use User;
@@ -80,6 +81,9 @@ abstract class Auth {
             }
             catch (ExpiredException $e) {
                 return ['status' => 'fail', 'id' => '-1', 'message' => 'Expired token'];
+            }
+            catch (Exception $e) {
+                return ['status' => 'fail', 'id' => '-1', 'message' => 'Signature verification failed'];
             }
         }
         else {

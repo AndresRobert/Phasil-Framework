@@ -10,6 +10,7 @@ define('API', ROOT.'api'.DS);
     define('CFG', API.'config'.DS);
         define('CORE', CFG.'Core.php');
         define('ROUTER', CFG.'Router.php');
+        define('STATUS', CFG.'Status.php');
     define('MDL', API.'models'.DS);
         define('MODEL', MDL.'Model.php');
     define('RSP', API.'responses'.DS);
@@ -35,7 +36,7 @@ define('APPNAME', 'Phasil');
 
 // ROUTES
 // GET, POST, PUT, PATCH, DELETE, COPY, HEAD, OPTIONS, LINK, UNLINK, PURGE, LOCK, UNLOCK, PROPFIND, VIEW
-define('ALLOWED_METHODS', ['POST', 'GET', 'PUT', 'DELETE']);
+define('ALLOWED_METHODS', ['POST', 'GET', 'PUT', 'DELETE', 'VIEW']);
 define('METHOD', strtoupper($_SERVER['REQUEST_METHOD']));
 define('REQUEST', $_SERVER['REQUEST_URI']);
 define('HEADERS', getallheaders());
@@ -58,6 +59,7 @@ define('JWT_EXPIRE', 600); // in seconds
 
 // USES
 require_once ROUTER;
+require_once STATUS;
 require_once MODEL;
 require_once RESPONSE;
 require_once AUTH;
@@ -75,3 +77,7 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: ".implode(',', ALLOWED_METHODS));
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
+// Status routes
+\Api\Route::Clear();
+\Api\Route::Create('VIEW', '/status', '/status');

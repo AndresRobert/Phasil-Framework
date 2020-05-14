@@ -27,7 +27,7 @@ This will define a new endpoint accessible by GET like
 https://www.yourwebsite.dev/api/myEndpoint, and the response for it will come from the 
 "about" method in the "home" class.
 
-Create the /api/responses/HomeResponse.php file to define the "home" class and the "about" 
+Create the "/api/responses/HomeResponse.php" file to define the "home" class and the "about" 
 method:
 ````php
 <?php
@@ -124,7 +124,7 @@ We can define a second endpoint in the "/api/index.php" file:
 <?php
 Route::Create('POST', '/listUsers', 'users/list');
 ````
-Add the class and method (api/models/UsersModel.php):
+Create the "api/models/UsersResponse.php" to put the corresponding class and method:
 ````php
 <?php
 
@@ -169,9 +169,9 @@ That's it! you successfully completed your first ERA!
 
 > That's way too unsafe! Anyone could access users data!!
 
-Sure! but we got your back also out from the box!
+You're right! but we got your back!
 
-## JWT - Out from the Box
+## JWT
 JWT Library (firebase/php-jwt) is there pre-implemented on the Auth kit.
 
 First, you need to change the JWT_SECRET on "/api/config/Core.php" or else 
@@ -179,24 +179,23 @@ everyone who uses this layout will "know your secret":
 ````php
 <?php
 // JWT
-// You must change this JWT_SECRET for your project
-define('JWT_SECRET', 'wLdkrBuQ36auUFzEd2mv9KyznwtLgaBXgoUUAMJvSXGN4uvy3OjnBUDbgT-gh27fl3AmDS2SdnVZ5KnHcWrWFrd8C13RXIbso4tDg1BVOEVgTZnUxIdiDm0csn--HRqEG-xbB8RZokBZeHTq53Uh0TkuUSPeb_tkfuhmYttIHZU');
+define('JWT_SECRET', 'wLdkrBuQ3...');
 define('JWT_ISSUER', 'PHASIL');
 define('JWT_AUDIENCE', 'MY_AUDIENCE');
 define('JWT_NOT_BEFORE', 5); // delay in seconds
 define('JWT_EXPIRE', 600); // duration in seconds
 ````
-Obviouly you can change everything.
+Obviouly, you can change everything.
 
-Second, make your response authorization safe (on api/models/UsersModel.php):
+Second, make your response authorization safe (on "api/models/UsersResponse.php"):
 ````php
 <?php
 function list (array $filters = []): array {
-    $validate = Auth::JWTValidate();
-    if ($validate['status'] === 'success') {
-        return (new User())->filter(['user_name', 'email'], $filters);
-    }
-    return ['response_code' => 401];
+    return self::RequiresAuthorization( // Put your code inside the authorization wrapper
+        function () use ($filters) { // inherit "filters" parameter
+            return (new User())->filter(['user_name', 'email'], $filters); // the actual code ;)
+        }
+    );
 }
 ````
 And call the endpoint again to get:
@@ -232,7 +231,7 @@ And you´ll get:
     }
 }
 ````
-Sorry, just kidding, I was using an expired token:
+Sorry, just kidding, I was using an expired token XD:
 ````json
 {
     "status": "OK",
@@ -244,13 +243,19 @@ Sorry, just kidding, I was using an expired token:
     ]
 }
 ````
-That's a lot better (actually the same as before the security extras)
+That's a lot better (actually, it's the same as before the security extras)
 
 > Wait a second, something feels wrong... how did you get that token? 
 
-You are right, I was trying to avoid the full documentation (as most programmers do).
+You are right, I was trying to avoid the full documentation (like most of us programmers do).
 
-Third, we should add a login to get the token right? (api/models/UsersModel.php):
+Third, on "/api/index.php" set the login route:
+````php
+<?php
+Route::Create('GET', '/login', 'users/login');
+````
+
+We should add a login method to get the token right? ("api/models/UsersResponse.php"):
 ````php
 <?php
 
@@ -285,7 +290,8 @@ Call it:
 curl --location --request POST 'localhost/api/login' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-	"id": "1"
+	"user_name": "andres",
+    "password": "$2y$10$..."
 }'
 ````
 and get:
@@ -300,7 +306,7 @@ and get:
 ````
 That's it! Notice that the token came back by one line of code: `Auth::JWToken($User)`
 
->I wanna know more?
+> I wanna know more?
 
 ## FAQ
 * How does the response get rendered?
@@ -310,11 +316,14 @@ That's it! Notice that the token came back by one line of code: `Auth::JWToken($
     echo Route::Read(METHOD, REQUEST, BODY);
     ````
 * Which DB options do I have?
-    * Insert, Select, Update, Delete & ComplexSelect (custom queries) are out of the box, but you are also encouraged to add more at /core/Database.php
+    * Insert, Select, Update, Delete & ComplexSelect (custom queries) are out of the box, but you are also encouraged to add more at api/kits/Database.php
 * Is there a Dashboard to control global variables and configuration?
-    * Of course! check /api/config/Core.php out!
+    * Of course! check "/api/config/Core.php" out!
 * Do we have a toolbox, or something?
-    * Sure we do! they are called Kits (/api/kits/) and there are some already (and more will be added): Session, Cookie, File, Text, etc., check them all out!.
+    * Sure we do! they are called Kits (/api/kits/) and there are some in there already (and more will be added): Session, Cookie, File, Text, etc., check them all out!.
+
+## Troubleshooting
+Check the status of your configuration calling "/api/status"
 
 ## Developed by 
 ACODE Design & Development 2020 @AndresRobert

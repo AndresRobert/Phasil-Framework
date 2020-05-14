@@ -8,6 +8,7 @@ use Kits\Text;
 
 class Users extends Response {
 
+
     public function register (array $userPayload): array {
         $return = [
             'status' => 'fail',
@@ -95,12 +96,11 @@ class Users extends Response {
     }
 
     function getByFilter ($filter): array {
-        $validate = Auth::JWTValidate();
-        if ($validate['status'] === 'success') {
-            return (new User())->filter(['*'], $filter);
-        }
-        $validate['response_code'] = 401;
-        return $validate;
+        return self::RequiresAuthorization(
+            function () use ($filter) {
+                return (new User())->filter(['*'], $filter);
+            }
+        );
     }
 
 }

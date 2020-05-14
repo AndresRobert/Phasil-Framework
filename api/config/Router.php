@@ -142,7 +142,7 @@ abstract class Route {
         $response = $responseCode === 200 ? Response::Get($routes[$request_method][$endpoint], $payload) : [];
         $responseCode = isset($response['response_code']) ? $response['response_code'] : $responseCode;
         http_response_code($responseCode);
-        return json_encode(['status' => self::$responseCodes[$responseCode], 'response' => $response] + ABOUT);
+        return json_encode(['status' => self::$responseCodes[$responseCode], 'response' => $response]);
     }
 
 }

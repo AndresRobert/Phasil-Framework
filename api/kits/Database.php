@@ -66,6 +66,16 @@ abstract class MySQL {
         return Text::StartsWith('select', $_query);
     }
 
+    public static function Check () {
+        try {
+            self::open();
+            return ['status' => 'success', 'message' => 'Connected to database'];
+        }
+        catch (PDOException $e) {
+            return ['status' => 'fail', 'message' => $e->getMessage()];
+        }
+    }
+
     public static function Fields (string $table): array {
         $_table = strtolower($table);
         $_query = "DESCRIBE {$_table}";
