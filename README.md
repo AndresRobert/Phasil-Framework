@@ -212,7 +212,7 @@ And call the endpoint again to get:
 ````
 Great!, protected already!, lets try to call it using a token:
 ````bash
-curl --location --request POST 'localhost/api/users/list' \
+curl --location --request POST 'https://www.yourwebsite.dev/api/users/list' \
 --header 'Authorization: Bearer eyJ0eXAiOiJ...' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -287,7 +287,7 @@ class Users extends Response {
 ````
 Call it:
 ````bash
-curl --location --request POST 'localhost/api/login' \
+curl --location --request POST 'https://www.yourwebsite.dev/api/login' \
 --header 'Content-Type: application/json' \
 --data-raw '{
 	"user_name": "andres",
@@ -325,7 +325,7 @@ That's it! Notice that the token came back by one line of code: `Auth::JWToken($
 ## Troubleshooting
 Check the status of your configuration calling "/api/status"
 `````bash
-curl --location --request VIEW 'http://localhost/api/status' \
+curl --location --request VIEW 'https://www.yourwebsite.dev/api/status' \
 --header 'Content-Type: application/json'
 `````
 
