@@ -34,7 +34,7 @@ abstract class MySQL {
     }
 
     private static function prepare_filter (array $filters): string {
-        $filters = $filters + ['1' => '1'];
+        $filters = ['1' => '1'] + $filters;
         return implode(' AND ', array_map(
             function ($columnName, $columnValue) {
                 return sprintf("%s='%s'", $columnName, $columnValue);
@@ -54,11 +54,13 @@ abstract class MySQL {
 
     private static function prepare_update (array $columns): string {
         $_update = [];
-        foreach ($columns as $column) {
-            [$_column, $_value] = $column;
-            $_update[] = $_column."='".$_value."'";
-        }
-        return implode(',', $_update);
+        return implode(',', array_map(
+            function ($columnName, $columnValue) {
+                return sprintf("%s='%s'", $columnName, $columnValue);
+            },
+            array_keys($columns),
+            array_values($columns)
+        ));
     }
 
     private static function is_select_query (string $query): bool {
@@ -140,7 +142,7 @@ abstract class MySQL {
             $rows = $connection->query($_query, PDO::FETCH_ASSOC)->fetchAll();
             $result = [
                 'status' => 'success',
-                'response' => $rows,
+                'response' => $rows[0],
                 'error' => 'no error'
             ];
             $connection = NULL;

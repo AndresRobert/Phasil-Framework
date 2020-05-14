@@ -10,9 +10,9 @@ abstract class Client {
      * @param array  $payload
      * @param array  $headers
      *
-     * @return mixed
+     * @return array
      */
-    final public static function Request (string $method, string $url, array $payload, array $headers) {
+    final public static function Request (string $method, string $url, array $payload, array $headers): array {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
@@ -23,12 +23,12 @@ abstract class Client {
         }
         $data = curl_exec($ch);
         if (curl_errno($ch)) {
-            $result = ['status' => 'success', 'response' => [], 'error' => curl_error($ch)];
+            $result = ['status' => 'fail', 'response' => [], 'error' => curl_error($ch)];
         }
         else {
             $result = ['status' => 'success', 'response' => json_decode($data), 'error' => 'no error'];
-            curl_close($ch);
         }
+        curl_close($ch);
         return $result;
     }
 

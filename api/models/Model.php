@@ -3,6 +3,7 @@
 namespace Base;
 
 use Kits\Database\MySQL;
+use Kits\Toolbox;
 
 /**
  * The force is strong with this Model class and you need to extend your classes from this one.
@@ -42,7 +43,8 @@ class Model {
      */
     public function get (string $columnName) {
         if (in_array($columnName, $this->fields)) {
-            return $this->columns[0][$columnName] ?? NULL;
+            $data = $this->toArray();
+            return $data[$columnName] ?? NULL;
         }
         return NULL;
     }
@@ -53,9 +55,11 @@ class Model {
      * @param array $row
      */
     public function set (array $row): void {
-        foreach ($row as $key => $value) {
-            if (in_array($key, $this->fields)) {
-                $this->columns[$key] = $value;
+        if (Toolbox::ArrayDepth($row) === 1) {
+            foreach ($row as $key => $value) {
+                if (in_array($key, $this->fields)) {
+                    $this->columns[$key] = $value;
+                }
             }
         }
     }
@@ -82,10 +86,11 @@ class Model {
      */
     public function create (): bool {
         if (is_null($this->get('id'))) {
+            $data = $this->toArray();
             $result = MySQL::Insert(
                 $this->table,
-                array_keys($this->columns),
-                array_values($this->columns)
+                array_keys($data),
+                array_values($data)
             );
             if ($result['status'] === 'success') {
                 $this->set(['id' => $result['response']]);
@@ -142,9 +147,12 @@ class Model {
      */
     public function update (): bool {
         if (!is_null($this->get('id'))) {
+            $data = $this->toArray();
+            unset($data['id']);
+            unset($data['created']);
             $result = MySQL::Update(
                 $this->table,
-                $this->columns,
+                $data,
                 ['id' => $this->get('id')]
             );
             return $result['status'] === 'success';
@@ -164,7 +172,7 @@ class Model {
                 ['id' => $this->get('id')]
             );
             if ($result['status'] === 'success') {
-                unset($this->columns['id']);
+                $this->columns = [];
                 return TRUE;
             }
         }
@@ -211,6 +219,10 @@ class Model {
             );
         }
         return count($rows) > 0;
+    }
+
+    public function toArray() {
+        return $this->columns ?? [];
     }
 
 }
