@@ -8,7 +8,6 @@ use Kits\Text;
 
 class Users extends Response {
 
-
     public function register (array $newUser): array {
         $response = [
             'status' => 'fail',
@@ -100,7 +99,5 @@ class Users extends Response {
             }
         );
     }
-
-
 
 }

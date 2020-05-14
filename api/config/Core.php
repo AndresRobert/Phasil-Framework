@@ -60,7 +60,7 @@ define('JWT_NOT_BEFORE', 5); // in seconds
 define('JWT_EXPIRE', 600); // in seconds
 
 // FCM
-define('FCM_ACCESS_KEY', 'AIzaSyA3XKV3p_lLMd-6_exf4L56MLIjLkxFL2Y');
+define('FCM_ACCESS_KEY', 'asdfghj');
 define('FCM_SERVER_KEY', 'Phasil-acode');
 
 // USES
