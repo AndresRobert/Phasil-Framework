@@ -21,7 +21,7 @@ abstract class File {
         return strtolower(pathinfo($path, PATHINFO_EXTENSION));
     }
 
-    static function SaveImage ($temp_path, $sub_folder = NULL, $name = NULL): bool {
+    final public static function SaveImage ($temp_path, $sub_folder = NULL, $name = NULL): bool {
         $_path = is_null($sub_folder) ? IMG : IMG.$sub_folder.DS;
         $_name = is_null($name) ? uniqid() : $name;
         $_file = $_path.basename($_name);
@@ -43,6 +43,22 @@ abstract class File {
             return $_name;
         }
         return '';
+    }
+
+    final public static function Write (string $path, string $content) {
+        $fileHandle = fopen($path, self::IsFile($path) ? 'a+' : 'w+');
+        fwrite($fileHandle, $content);
+        fclose($fileHandle);
+    }
+
+    final public static function Read (string $path) {
+        $contents = '';
+        if (self::IsFile($path)) {
+            $fileHandle = fopen($path, "r");
+            $contents = fread($fileHandle, filesize($path));
+            fclose($fileHandle);
+        }
+        return $contents ?: '';
     }
 
 }

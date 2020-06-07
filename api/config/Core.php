@@ -24,6 +24,7 @@ define('API', ROOT.'api'.DS);
         define('SESSION', KIT.'Session.php');
         define('TEXT', KIT.'Text.php');
         define('TOOLBOX', KIT.'Toolbox.php');
+    define('LOGS', API.'logs'.DS);
     define('SRC', API.'src'.DS);
     define('TMP', API.'tmp'.DS);
 define('VENDOR', ROOT.'vendor'.DS);
