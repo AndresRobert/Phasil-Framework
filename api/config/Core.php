@@ -20,7 +20,6 @@ define('API', ROOT.'api'.DS);
         define('CLIENT', KIT.'Client.php');
         define('COOKIE', KIT.'Cookie.php');
         define('DBASE', KIT.'Database.php');
-        define('FCM', KIT.'FCM.php');
         define('FILE', KIT.'File.php');
         define('SESSION', KIT.'Session.php');
         define('TEXT', KIT.'Text.php');
@@ -59,10 +58,6 @@ define('JWT_AUDIENCE', 'THE_AUDIENCE');
 define('JWT_NOT_BEFORE', 5); // in seconds
 define('JWT_EXPIRE', 600); // in seconds
 
-// FCM
-define('FCM_ACCESS_KEY', 'asdfghj');
-define('FCM_SERVER_KEY', 'Phasil-acode');
-
 // USES
 require_once ROUTER;
 require_once STATUS;
@@ -72,7 +67,6 @@ require_once AUTH;
 require_once CLIENT;
 require_once COOKIE;
 require_once DBASE;
-require_once FCM;
 require_once FILE;
 require_once SESSION;
 require_once TEXT;
