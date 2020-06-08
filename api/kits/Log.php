@@ -28,7 +28,7 @@ abstract class Log {
                 'time' => $_SERVER['REQUEST_TIME'],
                 'method' => $_SERVER['REQUEST_METHOD'],
                 'query' => $_SERVER['QUERY_STRING'],
-                'header' => HEADERS,
+                'header' => getallheaders(),
             ],
             'server' => [
                 'name' => $_SERVER['SERVER_NAME'],
