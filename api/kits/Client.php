@@ -16,7 +16,7 @@ abstract class Client {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, Toolbox::ArrayToJson($payload));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         if (isset($headers)) {
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -26,7 +26,7 @@ abstract class Client {
             $result = ['status' => 'fail', 'response' => [], 'error' => curl_error($ch)];
         }
         else {
-            $result = ['status' => 'success', 'response' => json_decode($data), 'error' => 'no error'];
+            $result = ['status' => 'success', 'response' => Toolbox::JsonToArray($data), 'error' => 'no error'];
         }
         curl_close($ch);
         return $result;

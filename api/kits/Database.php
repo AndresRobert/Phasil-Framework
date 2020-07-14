@@ -8,14 +8,15 @@ use Kits\Text;
 
 abstract class MySQL {
 
-    private static function open () {
+    private static function Open (): PDO
+    {
         $dsn = 'mysql:host='.DB_HOST.';dbname='.DB_NAME;
         $connection = new PDO($dsn, DB_USERNAME, DB_PASSWORD);
         $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $connection;
     }
 
-    private static function prepare_multiple_rows (array $rows): string {
+    private static function PrepareMultipleRows (array $rows): string {
         $multiple = [];
         foreach ($rows as $row) {
             $multiple[] = "('".implode("','", $row)."')";
@@ -23,20 +24,20 @@ abstract class MySQL {
         return implode(",", $multiple);
     }
 
-    private static function prepare_columns (array $columns, bool $brackets = FALSE): string {
+    private static function PrepareColumns (array $columns, bool $brackets = FALSE): string {
         $_start_bracket = $brackets ? '(' : '';
         $_end_bracket = $brackets ? ')' : '';
         return $_start_bracket.implode(',', $columns).$_end_bracket;
     }
 
-    private static function prepare_row (array $rows): string {
+    private static function PrepareRow (array $rows): string {
         return "('".implode("','", $rows)."')";
     }
 
-    private static function prepare_filter (array $filters): string {
+    private static function PrepareFilter (array $filters): string {
         $filters = ['1' => '1'] + $filters;
         return implode(' AND ', array_map(
-            function ($columnName, $columnValue) {
+            static function ($columnName, $columnValue) {
                 return sprintf("%s='%s'", $columnName, $columnValue);
             },
             array_keys($filters),
@@ -44,18 +45,17 @@ abstract class MySQL {
         ));
     }
 
-    private static function prepare_order (string $order): string {
+    private static function PrepareOrder (string $order): string {
         return $order === '' ? '' : ' ORDER BY '.$order;
     }
 
-    private static function prepare_limit (string $limit): string {
+    private static function PrepareLimit (string $limit): string {
         return $limit === '' ? '' : ' LIMIT '.$limit;
     }
 
-    private static function prepare_update (array $columns): string {
-        $_update = [];
+    private static function PrepareUpdate (array $columns): string {
         return implode(',', array_map(
-            function ($columnName, $columnValue) {
+            static function ($columnName, $columnValue) {
                 return sprintf("%s='%s'", $columnName, $columnValue);
             },
             array_keys($columns),
@@ -63,12 +63,13 @@ abstract class MySQL {
         ));
     }
 
-    private static function is_select_query (string $query): bool {
+    private static function IsSelectQuery (string $query): bool {
         $_query = strtolower($query);
         return Text::StartsWith('select', $_query);
     }
 
-    public static function Check () {
+    public static function Check (): ?array
+    {
         try {
             self::open();
             return ['status' => 'success', 'message' => 'Connected to database'];
@@ -83,8 +84,7 @@ abstract class MySQL {
         $_query = "DESCRIBE {$_table}";
         try {
             $connection = self::open();
-            $statement = $connection->prepare($_query);
-            $statement->execute();
+            $statement = $connection->query($_query);
             $fields = $statement->fetchAll(PDO::FETCH_COLUMN);
             $connection = NULL;
         }
@@ -95,10 +95,10 @@ abstract class MySQL {
     }
 
     public static function Insert (string $table, array $columns, array $rows, bool $multiple = FALSE): array {
-        $_columns = self::prepare_columns($columns, TRUE);
+        $_columns = self::PrepareColumns($columns, TRUE);
         $_rows = $multiple
-            ? self::prepare_multiple_rows($rows)
-            : self::prepare_row($rows);
+            ? self::PrepareMultipleRows($rows)
+            : self::PrepareRow($rows);
         $_table = DB_TABLE_PREFIX.$table;
         $_query = "INSERT INTO {$_table} {$_columns} VALUES {$_rows}";
         try {
@@ -131,14 +131,14 @@ abstract class MySQL {
     }
 
     public static function Select (string $table, array $columns, array $filters = [], string $order = '', string $limit = ''): array {
-        $_columns = self::prepare_columns($columns);
-        $_filters = self::prepare_filter($filters);
-        $_order = self::prepare_order($order);
-        $_limit = self::prepare_limit($limit);
+        $_columns = self::PrepareColumns($columns);
+        $_filters = self::PrepareFilter($filters);
+        $_order = self::PrepareOrder($order);
+        $_limit = self::PrepareLimit($limit);
         $_table = DB_TABLE_PREFIX.$table;
         $_query = "SELECT {$_columns} FROM {$_table} WHERE ({$_filters}) {$_order} {$_limit}";
         try {
-            $connection = self::open();
+            $connection = self::Open();
             $rows = $connection->query($_query, PDO::FETCH_ASSOC)->fetchAll();
             $result = [
                 'status' => 'success',
@@ -158,8 +158,8 @@ abstract class MySQL {
     }
 
     public static function Update (string $table, array $columns, array $filters): array {
-        $_columns = self::prepare_update($columns);
-        $_filters = self::prepare_filter($filters);
+        $_columns = self::PrepareUpdate($columns);
+        $_filters = self::PrepareFilter($filters);
         $_table = DB_TABLE_PREFIX.$table;
         $_query = "UPDATE {$_table} SET {$_columns} WHERE {$_filters}";
         try {
@@ -183,11 +183,11 @@ abstract class MySQL {
     }
 
     public static function Delete (string $table, array $filters): array {
-        $_filters = self::prepare_filter($filters);
+        $_filters = self::PrepareFilter($filters);
         $_table = DB_TABLE_PREFIX.$table;
         $_query = "DELETE FROM {$_table} WHERE {$_filters}";
         try {
-            $connection = self::open();
+            $connection = self::Open();
             $deleted = $connection->exec($_query);
             $result = [
                 'status' => 'success',
@@ -206,13 +206,14 @@ abstract class MySQL {
         return $result + ['statement' => $_query];
     }
 
-    public static function ComplexSelect ($query) {
+    public static function ComplexSelect ($query): array
+    {
         $result = [
             'status' => 'fail',
             'response' => '-1',
             'error' => 'invalid query'
         ];
-        if (self::is_select_query($query)) {
+        if (self::IsSelectQuery($query)) {
             try {
                 $connection = self::open();
                 $rows = $connection->query($query, PDO::FETCH_ASSOC)->fetchAll();

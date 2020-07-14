@@ -42,7 +42,7 @@ class Model {
      * @return mixed|null
      */
     public function get (string $columnName) {
-        if (in_array($columnName, $this->fields)) {
+        if (in_array($columnName, $this->fields, true)) {
             $data = $this->toArray();
             return $data[$columnName] ?? NULL;
         }
@@ -57,7 +57,7 @@ class Model {
     public function set (array $row): void {
         if (Toolbox::ArrayDepth($row) === 1) {
             foreach ($row as $key => $value) {
-                if (in_array($key, $this->fields)) {
+                if (in_array($key, $this->fields, true)) {
                     $this->columns[$key] = $value;
                 }
             }
@@ -148,8 +148,7 @@ class Model {
     public function update (): bool {
         if (!is_null($this->get('id'))) {
             $data = $this->toArray();
-            unset($data['id']);
-            unset($data['created']);
+            unset($data['id'], $data['created']);
             $result = MySQL::Update(
                 $this->table,
                 $data,
@@ -190,7 +189,7 @@ class Model {
      * @return array
      */
     public function filter (array $columns = ['*'], array $filters = [], string $order = '', string $limit = ''): array {
-        $columnsAreValid  = !array_diff($columns, $this->fields) || $columns == ['*'];
+        $columnsAreValid  = !array_diff($columns, $this->fields) || $columns === ['*'];
         if ($columnsAreValid) {
             $result = MySQL::Select(
                 $this->table,
@@ -206,7 +205,8 @@ class Model {
         return [];
     }
 
-    public function exists(string $column, string $value) {
+    public function exists(string $column, string $value): bool
+    {
         $columnsAreValid = !array_diff([$column], $this->fields);
         $rows = [];
         if ($columnsAreValid) {
@@ -221,7 +221,8 @@ class Model {
         return count($rows) > 0;
     }
 
-    public function toArray() {
+    public function toArray(): array
+    {
         return $this->columns ?? [];
     }
 

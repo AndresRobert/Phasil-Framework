@@ -21,11 +21,13 @@ define('API', ROOT.'api'.DS);
         define('COOKIE', KIT.'Cookie.php');
         define('DBASE', KIT.'Database.php');
         define('FILE', KIT.'File.php');
+        define('JSQL', KIT.'Jsql.php');
         define('SESSION', KIT.'Session.php');
         define('TEXT', KIT.'Text.php');
         define('TOOLBOX', KIT.'Toolbox.php');
     define('LOGS', API.'logs'.DS);
     define('SRC', API.'src'.DS);
+        define('IMG', SRC.'img'.DS);
     define('TMP', API.'tmp'.DS);
 define('VENDOR', ROOT.'vendor'.DS);
     define('AUTOLOAD', VENDOR.'autoload.php');
@@ -42,7 +44,11 @@ define('ALLOWED_METHODS', ['POST', 'GET', 'PUT', 'DELETE', 'VIEW']);
 define('METHOD', strtoupper($_SERVER['REQUEST_METHOD']));
 define('REQUEST', $_SERVER['REQUEST_URI']);
 define('HEADERS', getallheaders());
-define('BODY', json_decode(file_get_contents('php://input', 'r'), TRUE) ?? []);
+try {
+    define('BODY', json_decode(file_get_contents('php://input', 'r'), true, 512, JSON_THROW_ON_ERROR) ?? []);
+} catch (JsonException $e) {
+    define('BODY', []);
+}
 
 // DATABASE
 define('DB_HOST', 'localhost');
@@ -50,6 +56,7 @@ define('DB_NAME', 'phasil');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', 'root');
 define('DB_TABLE_PREFIX', '');
+define('JSQL_FOLDER', 'jsql');
 
 // JWT
 // You must change this JWT_SECRET for your project
@@ -73,6 +80,9 @@ require_once SESSION;
 require_once TEXT;
 require_once TOOLBOX;
 require_once AUTOLOAD;
+
+// JSQL Folder
+\Kits\File::Folder(JSQL_FOLDER);
 
 // HEADERS
 header("Access-Control-Allow-Origin: *");

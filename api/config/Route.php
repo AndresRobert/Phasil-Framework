@@ -5,6 +5,7 @@ namespace Api;
 use Base\Response;
 use Kits\Session;
 use Kits\Text;
+use Kits\Toolbox;
 
 abstract class Route {
 
@@ -140,9 +141,9 @@ abstract class Route {
         $routes = Session::Read('Routes');
         $responseCode = self::get_response_code($request_method, $endpoint);
         $response = $responseCode === 200 ? Response::Get($routes[$request_method][$endpoint], $payload) : [];
-        $responseCode = isset($response['response_code']) ? $response['response_code'] : $responseCode;
+        $responseCode = $response['response_code'] ?? $responseCode;
         http_response_code($responseCode);
-        return json_encode(['status' => self::$responseCodes[$responseCode], 'response' => $response]);
+        return Toolbox::ArrayToJson(['status' => self::$responseCodes[$responseCode], 'response' => $response]);
     }
 
 }

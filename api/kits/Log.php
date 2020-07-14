@@ -14,7 +14,8 @@ abstract class Log {
         'REPLACED'
     ];
 
-    final public static function Add (array $data, string $type = 'INFO', array $labels = []) {
+    final public static function Add (array $data, string $type = 'INFO', array $labels = []): void
+    {
         $TODAY = date("Ymd");
         $error_id = time();
         $latestLog = Session::Read('PhasilLatestLog');
@@ -41,7 +42,7 @@ abstract class Log {
             ],
         ];
         if ($data === []) {
-            File::Write(LOGS.'internal'.$TODAY.'.json', json_encode([
+            File::Write(LOGS.'internal'.$TODAY.'.json', Toolbox::ArrayToJson([
                 'time' => time(),
                 'type' => 'WARNING',
                 'data' => [
@@ -49,10 +50,10 @@ abstract class Log {
                     'content' => [],
                 ],
                 'labels' => [$error_id, 'Auto-generated'],
-            ]));
+            ]), 'append');
         }
         if (!in_array($type, self::LOG_TYPES)) {
-            File::Write(LOGS.'internal'.$TODAY.'.json', json_encode([
+            File::Write(LOGS.'internal'.$TODAY.'.json', Toolbox::ArrayToJson([
                 'time' => time(),
                 'type' => 'ERROR',
                 'data' => [
@@ -60,11 +61,11 @@ abstract class Log {
                     'content' => $type
                 ],
                 'labels' => [$error_id, 'Auto-generated'],
-            ]));
+            ]), 'append');
             $logInfo['type'] = 'REPLACED';
         }
         if ($labels === []) {
-            File::Write(LOGS.'internal'.$TODAY.'.json', json_encode([
+            File::Write(LOGS.'internal'.$TODAY.'.json', Toolbox::ArrayToJson([
                 'time' => time(),
                 'type' => 'NOTICE',
                 'data' => [
@@ -72,10 +73,10 @@ abstract class Log {
                     'content' => [],
                 ],
                 'labels' => [$error_id, 'Auto-generated'],
-            ]));
+            ]), 'append');
         }
         if ($latestLog === $data) {
-            File::Write(LOGS.'internal'.$TODAY.'.json', json_encode([
+            File::Write(LOGS.'internal'.$TODAY.'.json', Toolbox::ArrayToJson([
                 'time' => time(),
                 'type' => 'ALERT',
                 'data' => [
@@ -83,9 +84,9 @@ abstract class Log {
                     'content' => $data,
                 ],
                 'labels' => [$error_id, 'Auto-generated'],
-            ]));
+            ]), 'append');
         }
-        File::Write(LOGS.'log'.$TODAY.'.json', json_encode($logInfo));
+        File::Write(LOGS.'log'.$TODAY.'.json', Toolbox::ArrayToJson($logInfo), 'append');
     }
 
 }
