@@ -9,7 +9,7 @@ define('ROOT', $_SERVER['DOCUMENT_ROOT'].DS);
 define('API', ROOT.'api'.DS);
     define('CFG', API.'config'.DS);
         define('CORE', CFG.'Core.php');
-        define('ROUTER', CFG.'Router.php');
+        define('ROUTER', CFG.'Route.php');
         define('STATUS', CFG.'Status.php');
     define('MDL', API.'models'.DS);
         define('MODEL', MDL.'Model.php');
