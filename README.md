@@ -31,6 +31,9 @@ Create the "/api/responses/HomeResponse.php" file to define the "home" class and
 method:
 ````php
 <?php
+
+use Base\Response;
+
 class Home extends Response {
     public function about (): array {
         return [
