@@ -138,6 +138,17 @@ abstract class Route {
      * @return string
      */
     final public static function Read (string $request_method, string $endpoint, array $payload = []): string {
+        if ($request_method == 'GET') {
+            $endpoint_parameters = explode('?', $endpoint);
+            if (count($endpoint_parameters) != 1) {
+                $endpoint = $endpoint_parameters[0];
+                $parameters = explode('&', $endpoint_parameters[1]);
+                foreach ($parameters as $parameter) {
+                    list($key, $value) = explode('=', $parameter);
+                    $payload += [$key => $value];
+                }
+            }
+        }
         $routes = Session::Read('Routes');
         $responseCode = self::get_response_code($request_method, $endpoint);
         $response = $responseCode === 200 ? Response::Get($routes[$request_method][$endpoint], $payload) : [];
