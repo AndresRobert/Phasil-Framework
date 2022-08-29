@@ -1,14 +1,377 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="smpl">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://andresrobert.github.io/Simple-Framework/smpl.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --background: #DDEEEE;
+            --on-background-light: #AABBCC;
+            --primary: #334477;
+            --primary-dark: #223355;
+            --primary-light: #8899bb;
+            --hue-rotate: 145deg;
+            --yellow: #FD0;
+            --green: #6F0;
+            --red: #f99;
+            --blue: #6BE;
+            --gray: #BBD;
+        }
+    </style>
     <title>Phasil Framework</title>
-    <link href="//simple.acode.cl/src/acode.min.css" rel="stylesheet">
+    <meta name="description" content="A layout for rapid backend API development">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAAC2UlEQVRoge3YzWsXRxzH8ZeNUakmPrceNKitoI1gLST2UDx6KYgXQQgVD6L05NX2H6ggHsRT8aa0iFdP1Zstaa1K60NVUBREYy8+PyA0Jj3MrL9N/P12s/lt1MO84cvMLDOf+X53ZudhSSQSiUQikUhMFdPabD8dK9GLNViLHsxBF+bFPDzDIzyNdhv/4Cou4yZetelPJT7GdhyPjo3WZM9xCnuwbKqcn4kdOFej42V2VnhhM+oIYC6+x9BbDGC8DeE7dE82iO34tw0Hdked6cK0aTegexioEsAcHKuh4y+i3roatPL2E2aXBbFImJvtdvYCnVFzZ82BjOIPLGgVxCwM1tTRYE73xykIZBS/Rp/f4EBJw3stXkAnVuMQRmLdgy3qLsZ6HJmEZjPbP77hKgyXBPJLi07zZC+j7KP8QNgAq2g2s2F8kgnCt+goEfw7l78YhV4KQzw/Pj8c07Mx3ZDr9DE2x+cjuF9Rsxkd0ffXgWwqCSLriDAv18T8THyF/lh+Iuz212O5X4NuLM+VP6qgWcQmGoEsL6iYcSGmvcLekDGsMQJrNXZ/6Bun8VdMlwhnsolqFrGCRiBlvMS1mP88pq9wQzi6PIjPduDPXLv8iAzjfMx/WVFzwlxS/KGfm4DG1ujIllieZ+yKcz5X94eKmkW+XaAxnCcVD+HFJs+6hA10NbbhG+FakE2JPmOvCWdy+Q0VNYs4mS98qnj53RPrTcPDgnpVrA7N/4T70Bj2FzTYGOv01BREXZr7xgdBWAJ/a9EgW9O/rjGQdjVPC0t1UxYKc7kuZ6fKBnMvoiWz8fN74GwrO4oPy4LIMyAc6t6145kNCSvZpOgWrpl332EAd7BXG1fdPDOENf2M4mN1XTaC34VZkV3QamexsOMeUe/voGc4gV1YWtWpdn/QdQiHtl58Fq1H2KHnRuuKdZ8KR/nHxv6guxLtlrf8gy6RSCQSiUQiMTH+B1J+tuqIH0o6AAAAAElFTkSuQmCC">
 </head>
 <body>
-<h1>Phasil</h1>
-<p>PHP API Simple Layout</p>
-<script src="//simple.acode.cl/src/acode.min.js"></script>
-<script src="https://kit.fontawesome.com/a93fffc8fc.js" crossorigin="anonymous"></script>
+<header class="to-c-in">
+    <h1>Phasil Framework</h1>
+    <p>PHP API Simple Layout</p>
+    <p>
+        <a class="btn" href="phasil-api.zip">Download Now</a>
+    </p>
+</header>
+<p>Phasil stands for PHP Api SImple Layout, but also is pronounced like the Spanish word "fácil" that means easy.</p>
+
+<h3>Endpoint-Response API</h3>
+<p>New <em>ERA</em> model for API development (ERA: Endpoint-Response API).</p>
+<p>Don't get lost on hard to code REST definitions, you just need to define an endpoint and write a response for it. Easy as that!.</p>
+
+<h3>Databases and Security</h3>
+<p>Do you need to connect a database? Sure, MySQL configuration and JWT security is out of the box. The project has no deep roots so no limits on what you are able to modify.</p>
+
+<h3>Minimum Requirements</h3>
+<ul>
+    <li>Apache server</li>
+    <li>MySQL (by default, can be changed)</li>
+    <li>PHP 7+</li>
+</ul>
+
+<h3>How to use</h3>
+
+<h4>Add an <b>ENDPOINT</b></h4>
+<p>In <em>/api/index.php</em> set a new route (method, endpoint, response):</p>
+<code>Route::Create('<span style="color:var(--red)">POST</span>', '<span style="color:var(--green)">/myEndpoint</span>', '<span style="color:var(--yellow)">myClass</span>/<span style="color:var(--blue)">myMethod</span>');</code>
+<p>Create the <em>/api/responses/<span style="color:var(--yellow)">MyClass</span>Response.php</em>:</p>
+<code>
+<pre><span style="color:var(--gray)">&lt;?php</span>
+use Base\Response;
+
+class <span style="color:var(--yellow)">MyClass</span> extends Response {
+    public function <span style="color:var(--blue)">myMethod</span>(): array {
+        return [
+            'name' => 'Phasil',
+            'description' => 'ERA Layout (Endpoint-Response API)',
+            'link' => 'https://andresrobert.github.io/Phasil-Framework/',
+            'github' => 'https://github.com/AndresRobert/Phasil-Framework'
+        ];
+    }
+}</pre>
+</code>
+
+<h4>Get the <b>RESPONSE</b></h4>
+<p>Call the endpoint:</p>
+<code>
+<pre>curl --location --request <span style="color:var(--red)">POST</span> \
+--header 'Content-Type: application/json' \
+'https://www.mywebsite.dev/api/<span style="color:var(--green)">myEndpoint</span>'</pre>
+</code>
+<p>You should be seeing:</p>
+<code>
+<pre><span style="color:var(--gray)"><i>200 - HTTP OK</i>
+{
+    "status": "</span>OK<span style="color:var(--gray)">",
+    "response": [
+        {
+            "name": "</span>Phasil<span style="color:var(--gray)">",
+            "description": "</span>ERA Layout (Endpoint-Response API)<span style="color:var(--gray)">",
+            "link": "</span>https://andresrobert.github.io/Phasil-Framework/<span style="color:var(--gray)">",
+            "github": "</span>https://github.com/AndresRobert/Phasil-Framework<span style="color:var(--gray)">"
+        }
+    ]
+}</span></pre>
+</code>
+<p>That's it!</p>
+<p>...</p>
+<p><b><i>"Wait a second!, you said something about some database sh... stuff!!"</i></b></p>
+<p>...</p>
+<p>That's... true!</p>
+
+<h3>Databases</h3>
+
+<h4>Setup</h4>
+<p>You can set your mySQL credentials in <em>/api/config/Core.php</em> file:</p>
+<code>
+<pre><span style="color:var(--gray)">&lt;?php
+...
+// DATABASE
+define('DB_HOST', '</span>localhost<span style="color:var(--gray)">');
+define('DB_NAME', '</span>phasil<span style="color:var(--gray)">');
+define('DB_USERNAME', '</span>root<span style="color:var(--gray)">');
+define('DB_PASSWORD', '</span>root<span style="color:var(--gray)">');
+define('DB_TABLE_PREFIX', '');
+...</span></pre>
+</code>
+<p>If you are just starting, create a simple table:</p>
+<code>
+<pre><span style="color:var(--gray)">CREATE TABLE </span>users<span style="color:var(--gray)"> (
+  id int(255) NOT NULL AUTO_INCREMENT,
+  user_name varchar(255) NOT NULL,
+  password varchar(255) NOT NULL,
+  email varchar(255) NOT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE </span>users<span style="color:var(--gray)">
+  ADD PRIMARY KEY (id),
+  ADD UNIQUE KEY user_name (user_name),
+  ADD UNIQUE KEY email (email);
+
+INSERT INTO </span>users<span style="color:var(--gray)"> (id, user_name, password, email) VALUES
+  (1, 'andres', '$2y$10$...', 'andres@acode.cl'),
+  (2, 'robert', '$5t$87$...', 'robert@acode.cl');
+</span></pre>
+</code>
+
+<h4>Model</h4>
+<p>Create this file <em>/api/models/UsersModel.php</em> and extend the base model <i>(the important part is to define the table name)</i>:</p>
+<code>
+<pre><span style="color:var(--gray)">&lt;?php
+use Base\Model;
+
+class </span>Users<span style="color:var(--gray)"> extends Model {
+    public function __construct () {
+        $this->table = '</span>users<span style="color:var(--gray)">';
+        parent::__construct();
+    }
+}</span></pre>
+</code>
+<p>As you might have already guessed, you can obviously redefine everything, add more methods, etc... you're welcome <i>#Hela'sVoice</i></p>
+
+<h4>Access</h4>
+<p>Using the ERA model you can easily expose this data:</p>
+
+<h5>Add the users <b>ENDPOINT</b></h5>
+<p>Here <em>/api/index.php</em> add a new route:</p>
+<code>Route::Create('<span style="color:var(--red)">GET</span>', '<span style="color:var(--green)">/users</span>', '<span style="color:var(--yellow)">users</span>/<span style="color:var(--blue)">list</span>');</code>
+<p>Create the <em>/api/responses/<span style="color:var(--yellow)">Users</span>Response.php</em> and import your model:</p>
+<code>
+<pre><span style="color:var(--gray)">&lt;?php</span>
+use Base\Response;
+require_once MDL.'UsersModel.php' as UserModel;
+
+class <span style="color:var(--yellow)">Users</span> extends Response {
+    /**
+     * List all users
+     *
+     * @param array $filters: passed by payload ;)
+     * @return array
+     */
+    function <span style="color:var(--blue)">list</span>(array $filters = []): array {
+        /* Use filter([SELECT], [FROM]) */
+        return (new UserModel())->filter(['user_name', 'email'], $filters);
+    }
+}</pre>
+</code>
+
+<h5>Get Users's <b>RESPONSE</b></h5>
+<p>Call the endpoint (try a filter):</p>
+<code>
+<pre>curl --location --request <span style="color:var(--red)">GET</span> \
+--header 'Content-Type: application/json' \
+'https://www.mywebsite.dev/api/<span style="color:var(--green)">users</span>?id=1'</pre>
+</code>
+<p>You should be seeing:</p>
+<code>
+<pre><span style="color:var(--gray)"><i>200 - HTTP OK</i>
+{
+    "status": "</span>OK<span style="color:var(--gray)">",
+    "response": [
+        {
+            "user_name": "</span>andres<span style="color:var(--gray)">",
+            "email": "</span>andres@acode.cl<span style="color:var(--gray)">"
+        }
+    ]
+}</span></pre>
+</code>
+<p>That's it!</p>
+<p>...</p>
+<p><b><i>"Wait another second!, that's way too unsafe! Anyone can access users' data!!"</i></b></p>
+<p>...</p>
+<p>That's... also true... but we got your back!</p>
+
+<h3>JWT</h3>
+<p>JWT Library (firebase/php-jwt) is pre-implemented by using the Auth kit. Kits are just plugins wrappers or helpers for easy tooling.</p>
+
+<h4>Setup</h4>
+<p>First, you need to change the <em>JWT_SECRET</em> in <em>/api/config/Core.php</em> or else everyone who uses this layout will <b>"know your secret"</b> <i>#ifYouKnowWhatIMean</i>:</p>
+<code>
+<pre><span style="color:var(--gray)">&lt;?php
+...
+// JWT
+define('JWT_SECRET', '</span>wLdkrBuQ3...<span style="color:var(--gray)">');
+define('JWT_ISSUER', 'PHASIL');
+define('JWT_AUDIENCE', 'MY_AUDIENCE');
+define('JWT_NOT_BEFORE', 5); // delay in seconds
+define('JWT_EXPIRE', 600); // duration in seconds
+...</span></pre>
+</code>
+
+<h4>Make it safe</h4>
+<p>Make your response safe in <em>api/models/UsersResponse.php</em> using the authorization wrapper:</p>
+<code>
+<pre><span style="color:var(--gray)">&lt;?php</span>
+use Base\Response;
+require_once MDL.'UsersModel.php' as UserModel;
+
+class <span style="color:var(--yellow)">Users</span> extends Response {
+    function <span style="color:var(--blue)">list</span>(array $filters = []): array {
+        <span style="color:var(--red)">return self::RequiresAuthorization(function () use ($filters) {</span>
+            return (new User())->filter(['user_name', 'email'], $filters);
+        <span style="color:var(--red)">});</span>
+    }
+
+}</pre>
+</code>
+<p>And call the endpoint again to get:</p>
+<code>
+<pre><span style="color:var(--gray)"><i>401 - HTTP OK</i>
+{
+    "status": "</span>Unauthorized<span style="color:var(--gray)">",
+    "response": [
+        {
+            "status": "</span>fail<span style="color:var(--gray)">",
+            "id": "</span>-1<span style="color:var(--gray)">",
+            "message": "</span>Not Authorized<span style="color:var(--gray)">",
+            "response_code": "</span>401<span style="color:var(--gray)">"
+        }
+    ]
+}</span></pre>
+</code>
+<p>Great!, protected already!, lets try to call it using a token:</p>
+<code>
+<pre>curl --location --request <span style="color:var(--red)">GET</span> \
+--header 'Content-Type: application/json' \
+<span style="color:var(--blue)">--header 'Authorization: Bearer eyJ0eXAiOiJ...'</span> \
+'https://www.mywebsite.dev/api/<span style="color:var(--green)">users</span>?id=1'</pre>
+</code>
+<p>And you'll get:</p>
+<code>
+<pre><span style="color:var(--gray)"><i>401 - HTTP OK</i>
+{
+    "status": "</span>Unauthorized<span style="color:var(--gray)">",
+    "response": [
+        {
+            "status": "</span>fail<span style="color:var(--gray)">",
+            "id": "</span>-1<span style="color:var(--gray)">",
+            "message": "</span><span style="color:var(--blue)">Expired token</span><span style="color:var(--gray)">",
+            "response_code": "</span>401<span style="color:var(--gray)">"
+        }
+    ]
+}</span></pre>
+</code>
+<p>Sorry, just kidding, I was using a expired token XD:</p>
+<code>
+<pre><span style="color:var(--gray)"><i>200 - HTTP OK</i>
+{
+    "status": "</span>OK<span style="color:var(--gray)">",
+    "response": [
+        {
+            "user_name": "</span>andres<span style="color:var(--gray)">",
+            "email": "</span>andres@acode.cl<span style="color:var(--gray)">"
+        }
+    ]
+}</span></pre>
+</code>
+<p>That's a lot better (actually, it's the same as before but with the "security extras")</p>
+<p>...</p>
+<p><b><i>"Wait yet another second, something feels wrong... how did you get that token?"</i></b></p>
+<p>...</p>
+<p>You are right, I was trying to avoid the full documentation <i>(like most of us programmers do LOL)</i>.</p>
+
+<h4>Login Setup</h4>
+
+<p>Add the route:</p>
+<code>
+<pre><span style="color:var(--gray)">Route::Create('POST', '</span>/login<span style="color:var(--gray)">', 'users/login');</span></pre>
+</code>
+
+<p>In the Users response add the login method:</p>
+<code>
+<pre><span style="color:var(--gray)">...
+public function </span>login<span style="color:var(--gray)">(array $userPayload): array {
+    $User = new User();
+    if ($User->readBy(['user_name' => $userPayload['user_name']])) {
+        if (</span><span style="color:var(--red)">Auth::Match(</span><span style="color:var(--gray)">$userPayload['password'], $User->get('password')</span><span style="color:var(--red)">)</span><span style="color:var(--gray)">) {
+            $tokenData = </span><span style="color:var(--red)">Auth::JWToken(</span><span style="color:var(--gray)">$User</span><span style="color:var(--red)">)</span><span style="color:var(--gray)">;
+            return [
+                'response_code' => 200,
+                'token' => $tokenData['token']
+            ];
+        }
+    }
+    return [
+        'response_code' => 400,
+        'token' => 'notoken'
+    ];
+}
+...</span>
+</pre>
+</code>
+
+<p>Call it:</p>
+<code>
+<pre><span style="color:var(--gray)">curl --location --request POST 'https://www.mywebsite.dev/api/</span>login<span style="color:var(--gray)">' \
+--header 'Content-Type: application/json' \
+--data-raw '{"user_name": "andres","password": "$2y$10$..."}'
+</span></pre>
+</code>
+
+<p>Get:</p>
+<code>
+<pre><span style="color:var(--gray)"><i>200 - HTTP OK</i>
+{
+    "status": "</span>OK<span style="color:var(--gray)">",
+    "response": {
+        "response_code": </span>200<span style="color:var(--gray)">,
+        "token": "</span>eyJ0eXAiOiJ...<span style="color:var(--gray)">"
+    }
+}
+</span></pre>
+</code>
+<p>That's it! Notice that the token came back by one line of code: <em>Auth::JWToken($User)</em></p>
+<p>...</p>
+<p>Cool! I wanna know more!!!</p>
+
+<h3>FAQ</h3>
+
+<h6><b>How does the response get rendered?</b></h6>
+<p>This line in the <em>index.php</em> gets the job done by getting the <i>METHOD</i> used, the <i>REQUESTed</i> endpoint and the <i>BODY</i> payload:</p>
+<code>
+    <pre>echo Route::Read(METHOD, REQUEST, BODY);</pre>
+</code>
+
+<h6><b>Which DB options do I have?</b></h6>
+<p><i>Insert, Select, Update, Delete & ComplexSelect (custom queries)</i> are out of the box, but you are also encouraged to add more at <em>api/kits/Database.php</em></p>
+
+<h6><b>Is there a Dashboard to control global variables and configuration?</b></h6>
+<p>Of course! check <em>/api/config/Core.php</em> out!</p>
+
+<h6><b>Do I have a toolbox or something?</b></h6>
+<p>Sure we do! they are called Kits <em>/api/kits/</em> and there are some in there already (and more will be added): <i>Session, Cookie, File, Text, etc.</i>, check them all out!.</p>
+
+<h3>Troubleshooting</h3>
+<p>Check the status of your configuration calling <em>/api/status</em></p>
+<code>
+<pre><span style="color:var(--gray)">curl --location --request POST 'https://www.mywebsite.dev/api/</span>status<span style="color:var(--gray)">' \
+--header 'Content-Type: application/json'
+</span></pre>
+</code>
+
+<footer>
+    <h3>Phasil Framework</h3>
+    <p>Version 1.0.0</p>
+    <p>Visit <a href="https://github.com/AndresRobert/Phasil-Framework">Github</a> | <a href="https://andresrobert.github.io/Phasil-Framework/">Website</a></p>
+</footer>
+
 </body>
 </html>

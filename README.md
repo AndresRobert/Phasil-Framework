@@ -1,16 +1,12 @@
-# Phasil: PHP API Simple Layout
-This is simpler than a microframework, it's just a layout for rapid backend API development.
+# Phasil Framework: PHP API Simple Layout
+Phasil stands for PHP Api SImple Layout, but also is pronounced like the Spanish word "fácil" that means easy.
 
-Don't get lost on hard to code REST definitions, you just need to define an endpoint and 
-write a response for it. Easy as that!.
+## Endpoint-Response API
+New `ERA` model for API development (ERA: Endpoint-Response API).  
+Don't get lost on hard to code REST definitions, you just need to define an endpoint and write a response for it. Easy as that!.
 
-New ERA model for API development (ERA: Endpoint-Response API).
-
-You need to connect a database? Sure, MySQL configuration and JWT security is out of the box.
-The project has no deep roots so no limits on what you are able to modify.
-
-Phasil stands for PHp Api SImple Layout, but also is pronounced like the Spanish word "fácil" 
-that means easy.  
+## Databases and Security
+Do you need to connect a database? Sure, MySQL configuration and JWT security is out of the box. The project has no deep roots so no limits on what you are able to modify.
 
 ## Minimum Requirements
 * Apache server
@@ -18,146 +14,144 @@ that means easy.
 * PHP 7+
 
 ## How to use
-On "/api/index.php" set a new route (method, endpoint, response):
-````php
-<?php
-Route::Create('GET', '/myEndpoint', 'home/about');
-````
-This will define a new endpoint accessible by GET like 
-https://www.yourwebsite.dev/api/myEndpoint, and the response for it will come from the 
-"about" method in the "home" class.
 
-Create the "/api/responses/HomeResponse.php" file to define the "home" class and the "about" 
-method:
+### Add an ENDPOINT
+In `/api/index.php` set a new route (method, endpoint, response):
+````php
+Route::Create('POST', '/myEndpoint', 'myClass/myMethod');
+````
+Create the `/api/responses/MyClassResponse.php`:
 ````php
 <?php
 
 use Base\Response;
 
-class Home extends Response {
-    public function about (): array {
+class MyClass extends Response {
+    public function myMethod(): array {
         return [
             'name' => 'Phasil',
-            'description' => 'ERA Layout (Endpoint-Response API) Facilitator',
-            'link' => 'https://phasil.acode.cl',
+            'description' => 'ERA Layout (Endpoint-Response API)',
+            'link' => 'https://andresrobert.github.io/Phasil-Framework/',
             'github' => 'https://github.com/AndresRobert/Phasil-Framework'
         ];
     }
 }
 ````
 
-Call it by Postman, browser or just:
+### Get the RESPONSE
+Call the endpoint:
 ````bash
-curl --location --request GET 'https://www.yourwebsite.dev/api/myEndpoint' \
---header 'Content-Type: application/json'
+curl --location --request POST \
+--header 'Content-Type: application/json' \
+'https://www.mywebsite.dev/api/myEndpoint'
 ````
-
-And get:
+You should be seeing:
 ````json
 {
     "status": "OK",
     "response": [
         {
             "name": "Phasil",
-            "description": "ERA Layout (Endpoint-Response API) Facilitator",
-            "link": "https://phasil.acode.cl",
-            "github": "https://github.com/AndresRobert/Phasil-Framework"        
+            "description": "ERA Layout (Endpoint-Response API)",
+            "link": "https://andresrobert.github.io/Phasil-Framework/",
+            "github": "https://github.com/AndresRobert/Phasil-Framework"
         }
     ]
 }
 ````
-
 That's it!
-
 >"Wait a second!, you said something about some database sh... stuff!!"
+That's... true!
 
-True! you can actually add some more love to your project, you can set your credentials 
-on "/api/config/Core.php" file:
-````php
+## Databases
+
+### Setup
+
+You can set your mySQL credentials in `/api/config/Core.php` file:
+```php
 <?php
+...
 // DATABASE
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'phasil');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', 'root');
 define('DB_TABLE_PREFIX', '');
-````
-Create a table (MySQL):
-````mysql
-DROP TABLE IF EXISTS users;
+...
+```
+If you are just starting, create a simple table:
+```sql
 CREATE TABLE users (
   id int(255) NOT NULL AUTO_INCREMENT,
   user_name varchar(255) NOT NULL,
   password varchar(255) NOT NULL,
   email varchar(255) NOT NULL,
-  full_name varchar(255) DEFAULT NULL,
-  device varchar(255) DEFAULT NULL,
-  created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  modified timestamp NULL DEFAULT NULL,
-  deleted timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE users
   ADD PRIMARY KEY (id),
   ADD UNIQUE KEY user_name (user_name),
   ADD UNIQUE KEY email (email);
-````
-Add some rows:
-````mysql
+
 INSERT INTO users (id, user_name, password, email) VALUES
-(1, 'andres', '$2y$10$...', 'andres@acode.cl'),
-(2, 'robert', '$5t$87$...', 'robert@acode.cl');
-````
-Create/Use the corresponding model file "/api/models/UsersModel.php" and extend the basic Model 
-(the important part is to define the table_name):
-````php
+  (1, 'andres', '$2y$10$...', 'andres@acode.cl'),
+  (2, 'robert', '$5t$87$...', 'robert@acode.cl');
+```
+
+### Model
+
+Create this file `/api/models/UsersModel.php` and extend the base model (the important part is to define the table name):
+```php
 <?php
+use Base\Model;
+
 class Users extends Model {
     public function __construct () {
         $this->table = 'users';
         parent::__construct();
     }
 }
-````
-As you can guess, you can obviously redefine everything, add more methods, etc... 
-you're welcome #Hela'sVoice.
+```
+As you might have already guessed, you can obviously redefine everything, add more methods, etc... you're welcome _#Hela'sVoice_
 
-We can define a second endpoint in the "/api/index.php" file:
-````php
-<?php
-Route::Create('POST', '/listUsers', 'users/list');
-````
-Create the "api/models/UsersResponse.php" to put the corresponding class and method:
-````php
-<?php
+### Access
 
-require_once MDL.'UserModel.php';
+Using the ERA model you can easily expose this data:
+
+#### Add the users ENDPOINT
+Here `/api/index.php` add a new route:
+```php
+Route::Create('GET', '/users', 'users/list');
+```
+Create the `/api/responses/UsersResponse.php` and import your model:
+```php
+<?php
+use Base\Response;
+require_once MDL.'UsersModel.php' as UserModel;
 
 class Users extends Response {
-    
     /**
      * List all users
      *
      * @param array $filters: passed by payload ;)
      * @return array
      */
-    function list (array $filters = []): array {
-        return (new User())->filter(['user_name', 'email'], $filters);
+    function list(array $filters = []): array {
+        /* Use filter([SELECT], [FROM]) */
+        return (new UserModel())->filter(['user_name', 'email'], $filters);
     }
-
 }
-````
+```
 
-Call the endpoint (you can add a filter if you want):
-````bash
-curl --location --request POST 'https://www.yourwebsite.dev/api/users/list' \
+#### Get Users's RESPONSE
+Call the endpoint (try a filter):
+```bash
+curl --location --request GET \
 --header 'Content-Type: application/json' \
---data-raw '{
-	"id": "1"
-}'
-````
-And get:
-````json
+'https://www.mywebsite.dev/api/users?id=1'
+```
+You should be seeing:
+```json
 {
     "status": "OK",
     "response": [
@@ -167,75 +161,84 @@ And get:
         }
     ]
 }
-````
-That's it! you successfully completed your first ERA!
-
-> That's way too unsafe! Anyone could access users data!!
-
-You're right! but we got your back!
+```
+That's it!
+> "Wait another second!, that's way too unsafe! Anyone can access users' data!!"
+That's... also true... but we got your back!
 
 ## JWT
-JWT Library (firebase/php-jwt) is there pre-implemented on the Auth kit.
 
-First, you need to change the JWT_SECRET on "/api/config/Core.php" or else 
-everyone who uses this layout will "know your secret":
-````php
+JWT Library (`firebase/php-jwt`) is pre-implemented by using the Auth kit. Kits are just plugins wrappers or helpers for easy tooling.
+
+### Setup
+
+First, you need to change the `JWT_SECRET` in `/api/config/Core.php` or else everyone who uses this layout will **"know your secret"** _#ifYouKnowWhatIMean_:
+```php
 <?php
+...
 // JWT
 define('JWT_SECRET', 'wLdkrBuQ3...');
 define('JWT_ISSUER', 'PHASIL');
 define('JWT_AUDIENCE', 'MY_AUDIENCE');
 define('JWT_NOT_BEFORE', 5); // delay in seconds
 define('JWT_EXPIRE', 600); // duration in seconds
-````
-Obviouly, you can change everything.
+...
+```
 
-Second, make your response authorization safe (on "api/models/UsersResponse.php"):
-````php
+### Make it safe
+
+Make your response safe in `api/models/UsersResponse.php` using the authorization wrapper:
+```php
 <?php
-function list (array $filters = []): array {
-    return self::RequiresAuthorization( // Put your code inside the authorization wrapper
-        function () use ($filters) { // inherit "filters" parameter
-            return (new User())->filter(['user_name', 'email'], $filters); // the actual code ;)
-        }
-    );
+use Base\Response;
+require_once MDL.'UsersModel.php' as UserModel;
+
+class Users extends Response {
+    function list(array $filters = []): array {
+        return self::RequiresAuthorization(function () use ($filters) {
+            return (new User())->filter(['user_name', 'email'], $filters);
+        });
+    }
+
 }
-````
+```
 And call the endpoint again to get:
-````json
+```json
 {
     "status": "Unauthorized",
-    "response": {
-        "status": "fail",
-        "id": "-1",
-        "message": "Not Authorized",
-        "response_code": 401
-    }
+    "response": [
+        {
+            "status": "fail",
+            "id": "-1",
+            "message": "Not Authorized",
+            "response_code": "401"
+        }
+    ]
 }
-````
+```
 Great!, protected already!, lets try to call it using a token:
-````bash
-curl --location --request POST 'https://www.yourwebsite.dev/api/users/list' \
---header 'Authorization: Bearer eyJ0eXAiOiJ...' \
+```bash
+curl --location --request GET \
 --header 'Content-Type: application/json' \
---data-raw '{
-	"id": "1"
-}'
-````
-And you´ll get:
-````json
+--header 'Authorization: Bearer eyJ0eXAiOiJ...' \
+'https://www.mywebsite.dev/api/users?id=1'
+```
+And you'll get:
+```json
 {
     "status": "Unauthorized",
-    "response": {
-        "status": "fail",
-        "id": "-1",
-        "message": "Expired token",
-        "response_code": 401
-    }
+    "response": [
+        {
+            "status": "fail",
+            "id": "-1",
+            "message": "Expired token",
+            "response_code": "401"
+        }
+    ]
 }
-````
-Sorry, just kidding, I was using an expired token XD:
-````json
+```
+Sorry, just kidding! I was using a expired token XD:
+```json
 {
     "status": "OK",
     "response": [
@@ -245,97 +248,81 @@ Sorry, just kidding, I was using an expired token XD:
         }
     ]
 }
-````
-That's a lot better (actually, it's the same as before the security extras)
+```
+That's a lot better (actually, it's the same as before but with the "security extras")
+> "Wait yet another second, something feels wrong... how did you get that token?"
+You are right, I was trying to avoid the full documentation (_like most of us programmers do LOL_).
 
-> Wait a second, something feels wrong... how did you get that token? 
+## Login Setup
 
-You are right, I was trying to avoid the full documentation (like most of us programmers do).
-
-Third, on "/api/index.php" set the login route:
-````php
-<?php
-Route::Create('GET', '/login', 'users/login');
-````
-
-We should add a login method to get the token right? ("api/models/UsersResponse.php"):
-````php
-<?php
-
-require_once MDL.'UserModel.php';
-
-class Users extends Response {
-    
-    /** List all users */
-    function list (array $filters = []): array {...}
-    
-    public function login (array $userPayload): array {
-        $User = new User();
-        if ($User->readBy(['user_name' => $userPayload['user_name']])) {
-            if (Auth::Match($userPayload['password'], $User->get('password'))) {
-                $tokenData = Auth::JWToken($User);
-                return [
-                    'response_code' => 200,
-                    'token' => $tokenData['token']
-                ];
-            }
+Add the route:
+```bash
+Route::Create('POST', '/login', 'users/login');
+```
+In the Users response add the login method:
+```php
+...
+public function login(array $userPayload): array {
+    $User = new User();
+    if ($User->readBy(['user_name' => $userPayload['user_name']])) {
+        if (Auth::Match($userPayload['password'], $User->get('password'))) {
+            $tokenData = Auth::JWToken($User);
+            return [
+                'response_code' => 200,
+                'token' => $tokenData['token']
+            ];
         }
-        return [
-           'response_code' => 400,
-           'token' => 'notoken'
-       ];
     }
-
+    return [
+        'response_code' => 400,
+        'token' => 'notoken'
+    ];
 }
-````
+...
+```
 Call it:
-````bash
-curl --location --request POST 'https://www.yourwebsite.dev/api/login' \
+```bash
+curl --location --request POST 'https://www.mywebsite.dev/api/login' \
 --header 'Content-Type: application/json' \
---data-raw '{
-	"user_name": "andres",
-    "password": "$2y$10$..."
-}'
-````
-and get:
-````json
+--data-raw '{"user_name": "andres","password": "$2y$10$..."}'
+```
+Get:
+```json
 {
     "status": "OK",
     "response": {
         "response_code": 200,
-        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJQSEFTSUwiLCJhdWQiOiJUSEVfQVVESUVOQ0UiLCJpYXQiOjE1ODkzMjE2MTYsIm5iZiI6MTU4OTMyMTYyMSwiZXhwIjoxNTg5MzIyMjE2LCJkYXRhIjp7ImlkIjoiNiIsInVzZXJfbmFtZSI6ImJhcmJhcmEiLCJlbWFpbCI6ImJhcmJhcmFAYWNvZGUuY2wifX0.dC0RzJAGg38lxD7c1AIBmKRCMh8I1ffcjL15JGggiTc"
+        "token": "eyJ0eXAiOiJ..."
     }
 }
-````
+```
 That's it! Notice that the token came back by one line of code: `Auth::JWToken($User)`
-
-> I wanna know more?
+> Cool! I wanna know more!!!
 
 ## FAQ
-* How does the response get rendered?
-    * This line in the index.php gets the job done by getting the METHOD used, the REQUESTed endpoint and the BODY payload:
-    ````php
-    <?php
-    echo Route::Read(METHOD, REQUEST, BODY);
-    ````
-* Which DB options do I have?
-    * Insert, Select, Update, Delete & ComplexSelect (custom queries) are out of the box, but you are also encouraged to add more at api/kits/Database.php
-* Is there a Dashboard to control global variables and configuration?
-    * Of course! check "/api/config/Core.php" out!
-* Do we have a toolbox, or something?
-    * Sure we do! they are called Kits (/api/kits/) and there are some in there already (and more will be added): Session, Cookie, File, Text, etc., check them all out!.
+
+#### How does the response get rendered?
+This line in the `index.php` gets the job done by getting the _METHOD_ used, the _REQUESTed_ endpoint and the _BODY_ payload:
+```php
+echo Route::Read(METHOD, REQUEST, BODY);
+```
+
+#### Which DB options do I have?
+_Insert, Select, Update, Delete & ComplexSelect (custom queries)_ are out of the box, but you are also encouraged to add more at `api/kits/Database.php`
+
+#### Is there a Dashboard to control global variables and configuration?
+Of course! check `/api/config/Core.php out!`
+
+#### Do I have a toolbox or something?
+Sure we do! they are called Kits `/api/kits/` and there are some in there already (and more will be added): _Session, Cookie, File, Text, etc._, check them all out!.
 
 ## Troubleshooting
-Check the status of your configuration calling "/api/status"
-`````bash
-curl --location --request VIEW 'https://www.yourwebsite.dev/api/status' \
+Check the status of your configuration calling `/api/status`
+```bash
+curl --location --request POST 'https://www.mywebsite.dev/api/status' \
 --header 'Content-Type: application/json'
-`````
-
-## Developed by 
-ACODE Design & Development 2020 @AndresRobert
-
-Visit https://phasil.acode.cl
+```
 
 ## Version
-0.1.0
+Version 1.0.0
+See full documentation [here](https://andresrobert.github.io/Simple-Framework/)
