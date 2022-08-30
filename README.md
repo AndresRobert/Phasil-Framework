@@ -60,7 +60,8 @@ You should be seeing:
 }
 ````
 That's it!
->"Wait a second!, you said something about some database sh... stuff!!"    
+> "Wait a second!, you said something about some database sh... stuff!!"
+
 That's... true!
 
 ## Databases
@@ -163,7 +164,8 @@ You should be seeing:
 }
 ```
 That's it!
-> "Wait another second!, that's way too unsafe! Anyone can access users' data!!"    
+> "Wait another second!, that's way too unsafe! Anyone can access users' data!!"
+
 That's... also true... but we got your back!
 
 ## JWT
@@ -250,7 +252,8 @@ Sorry, just kidding! I was using a expired token XD:
 }
 ```
 That's a lot better (actually, it's the same as before but with the "security extras")
-> "Wait yet another second, something feels wrong... how did you get that token?"    
+> "Wait yet another second, something feels wrong... how did you get that token?"
+
 You are right, I was trying to avoid the full documentation (_like most of us programmers do LOL_).
 
 ## Login Setup
